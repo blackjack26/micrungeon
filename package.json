@@ -1,0 +1,41 @@
+{
+  "name": "goff18",
+  "version": "0.1.0",
+  "description": "Phaser 3 hybrid game",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "webpack --mode=development",
+    "deploy": "webpack --mode=production --config webpack.production.config.js",
+    "test": "eslint ./src/**/**.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blackjack26/goff18.git"
+  },
+  "keywords": [
+    "phaser"
+  ],
+  "author": "Jack Grzechowiak",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blackjack26/goff18/issues"
+  },
+  "homepage": "https://github.com/blackjack26/goff18#readme",
+  "dependencies": {
+    "phaser": "^3.15.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "babel-loader": "^8.0.4",
+    "browser-sync": "^2.26.3",
+    "browser-sync-webpack-plugin": "^2.2.2",
+    "clean-webpack-plugin": "^0.1.19",
+    "copy-webpack-plugin": "^4.6.0",
+    "html-webpack-plugin": "^3.2.0",
+    "raw-loader": "^0.5.1",
+    "webpack": "^4.23.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
+  }
+}

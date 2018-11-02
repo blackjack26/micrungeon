@@ -1,0 +1,11 @@
+node_modules/
+dist/
+build/
+dev/
+.vscode/
+.idea
+*.log
+src_old
+*.old.js
+*.zip
+dump/
