@@ -18,12 +18,22 @@
           -ms-interpolation-mode: nearest-neighbor;    /* IE (non standard naming) */
           image-rendering: pixelated;                  /* Chrome 41 */
         }
+
+        body {
+          background-color: white;
+        }
+        canvas {
+          box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+          border: 5px solid #339966;
+          margin: 10px;
+        }
     </style>
 </head>
 
-<body style="background-color: black;">
+<body>
     <div style="text-align: center">
       <span style="color: white;">Goff 18</span>
     </div>
     <div id="content" style="display: block; width: 100%; text-align: center"></div>
-<script type="text/javascript" src="./dev/vendor.js"></script><script type="text/javascript" src="./dev/app.js"></script></body></html>
+<script type="text/javascript" src="./dev/vendor.js"></script><script type="text/javascript" src="./dev/app.js"></script></body>
+</html>
