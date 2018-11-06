@@ -1,6 +1,8 @@
-import DanceDance from '../minigames/DanceDance';
+import {
+  DanceDance,
+  Difficulty
+} from '../minigames';
 import KeyBinding from '../util/KeyBinding';
-import { Difficulty } from '../minigames/MiniGame';
 
 /**
  * The game scene is the main scene used when the player is in actual game play.

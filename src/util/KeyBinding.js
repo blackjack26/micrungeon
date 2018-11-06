@@ -3,7 +3,8 @@ const BINDINGS = {
   RIGHT: Phaser.Input.Keyboard.KeyCodes.D,
   UP: Phaser.Input.Keyboard.KeyCodes.W,
   DOWN: Phaser.Input.Keyboard.KeyCodes.S,
-  INTERACT: Phaser.Input.Keyboard.KeyCodes.E
+  INTERACT: Phaser.Input.Keyboard.KeyCodes.E,
+  SPACE: Phaser.Input.Keyboard.KeyCodes.SPACE
 };
 
 /**
