@@ -1,6 +1,7 @@
 import 'phaser';
 import BootScene from './scenes/BootScene';
 import TitleScene from './scenes/TitleScene';
+import GameScene from './scenes/GameScene';
 
 const config = {
   type: Phaser.AUTO,
@@ -9,8 +10,10 @@ const config = {
   height: 600,
   scene: [
     BootScene,
-    TitleScene
+    TitleScene,
+    GameScene
   ]
 };
 
-var game = new Phaser.Game(config);
+// eslint-disable-next-line no-unused-vars
+const game = new Phaser.Game( config );
