@@ -1,4 +1,4 @@
-# Micrungeon [![Build Status](https://travis-ci.org/blackjack26/goff18.svg?branch=develop)](https://travis-ci.org/blackjack26/goff18)
+# Micrungeon [![Build Status](https://travis-ci.org/blackjack26/micrungeon.svg?branch=develop)](https://travis-ci.org/blackjack26/micrungeon)
 
 A game made for [Game Off 2018](https://itch.io/jam/game-off-2018) to incorporate the "Hybrid" theme.
 
@@ -9,7 +9,7 @@ A game made for [Game Off 2018](https://itch.io/jam/game-off-2018) to incorporat
 Navigate into your workspace directory and run:
 
 ```sh
-git clone https://github.com/blackjack26/goff18.git
+git clone https://github.com/blackjack26/micrungeon.git
 ```
 
 ### Install NodeJS and NPM
@@ -21,7 +21,7 @@ https://nodejs.org/en/
 Navigate to the cloned repo's directory and install dependencies:
 
 ```sh
-cd /path/to/goff18
+cd /path/to/micrungeon
 npm install
 ```
 
@@ -51,7 +51,7 @@ If you want to view the production deployment you can use `http-server` for a qu
 
 ```sh
 npm i -g http-server
-cd /path/to/goff18
+cd /path/to/micrungeon
 http-server ./build -p 8081
 ```
 
@@ -59,7 +59,7 @@ Then navigate to `http://localhost:8081` to view.
 
 ## License
 
-Goff18 is released under the [MIT License](https://github.com/blackjack26/goff18/blob/develop/LICENSE)
+Micrungeon is released under the [MIT License](https://github.com/blackjack26/micrungeon/blob/develop/LICENSE)
 
 ## Authors
 
