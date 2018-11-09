@@ -1,3 +1,5 @@
+import { createAnimations } from '../util/Animation';
+
 /**
  * The boot scene, or splash screen, is used to initialize most of the game
  * objects and images. The preload method will be mostly utilized. Once all
@@ -28,12 +30,18 @@ export default class BootScene extends Phaser.Scene {
     // Register a load complete event to launch the title screen when all
     // files are loaded
     this.load.on( 'complete', () => {
+      createAnimations( this );
       progress.destroy();
       this.scene.start( 'TitleScene' );
     } );
 
     // Load all assets here
     this.load.image( 'logo', 'assets/logo.png' );
-    this.load.script( 'webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js' );
+    this.load.script( 'webfont',
+      'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js' );
+
+    // TODO: DELETE THIS SAMPLE
+    this.load.atlas( 'sample-sprites', 'assets/sample-sprites.png',
+      'assets/sample-sprites.json' );
   }
 }

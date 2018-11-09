@@ -3,6 +3,7 @@ import {
   Difficulty
 } from '../minigames';
 import KeyBinding from '../util/KeyBinding';
+import { SampleEntity } from '../entity';
 import Dungeon from '../dungeon/Dungeon';
 
 /**
@@ -32,6 +33,16 @@ export default class GameScene extends Phaser.Scene {
   create() {
     this.keys = KeyBinding.createKeys( this, [ 'up', 'left', 'right' ] );
     this.add.text( 16, 16, 'Game Scene', { fontSize: '20px', color: '#FFF' } );
+
+    // TODO: DELETE THIS SAMPLE
+    this.entityGroup = this.add.group();
+    const entityObj = new SampleEntity( {
+      scene: this,
+      key: 'sample-sprites',
+      x: 100,
+      y: 100
+    } );
+    this.entityGroup.add( entityObj );
   }
 
   /**
