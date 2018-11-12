@@ -3,6 +3,7 @@ import {
   Difficulty
 } from '../minigames';
 import KeyBinding from '../util/KeyBinding';
+import Dungeon from '../dungeon/Dungeon';
 
 /**
  * The game scene is the main scene used when the player is in actual game play.
@@ -22,6 +23,7 @@ export default class GameScene extends Phaser.Scene {
   preload() {
     // Load all mini games here, possibly move to BootScene
     this.scene.add( 'DanceDance', DanceDance );
+    this.dungeon = new Dungeon();
   }
 
   /**

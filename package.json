@@ -1,5 +1,5 @@
 {
-  "name": "goff18",
+  "name": "Micrungeon",
   "version": "0.1.0",
   "description": "Phaser 3 hybrid game",
   "main": "src/index.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/blackjack26/goff18.git"
+    "url": "git+https://github.com/blackjack26/micrungeon.git"
   },
   "keywords": [
     "phaser"
@@ -18,11 +18,12 @@
   "author": "Jack Grzechowiak",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/blackjack26/goff18/issues"
+    "url": "https://github.com/blackjack26/micrungeon/issues"
   },
-  "homepage": "https://github.com/blackjack26/goff18#readme",
+  "homepage": "https://github.com/blackjack26/micrungeon#readme",
   "dependencies": {
-    "phaser": "^3.15.1"
+    "phaser": "^3.15.1",
+    "seedrandom": "^2.4.4"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
