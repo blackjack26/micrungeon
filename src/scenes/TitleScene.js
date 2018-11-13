@@ -19,7 +19,7 @@ export default class TitleScene extends Phaser.Scene {
    * @override
    */
   preload() {
-
+    
   }
 
   /**
