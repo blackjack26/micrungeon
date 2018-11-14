@@ -4,7 +4,7 @@ import TitleScene from './scenes/TitleScene';
 import GameScene from './scenes/GameScene';
 
 const config = {
-  type: Phaser.AUTO,
+  type: Phaser.WEBGL,
   parent: 'content',
   width: 800,
   height: 600,
@@ -12,8 +12,13 @@ const config = {
     BootScene,
     TitleScene,
     GameScene
-  ]
+  ],
+  physics: {
+    default: 'arcade',
+    arcade: {gravity: { y: 0 }}
+  }
 };
+
 
 // eslint-disable-next-line no-unused-vars
 const game = new Phaser.Game( config );

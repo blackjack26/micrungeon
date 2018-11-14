@@ -1,5 +1,6 @@
 import { Room, RoomType } from './Room';
 import Tiles from './Tiles';
+import { Orientation } from '../globals';
 
 /**
  * A hallway is a simplified room that is used as a connector between two
@@ -30,6 +31,8 @@ export default class Hallway extends Room {
       for ( let r = 0; r < hallway.height; r++ ) {
         hallway.tiles[ r ][ 1 ] = Tiles.FLOOR;
       }
+
+      hallway.orientation = Orientation.VERTICAL;
     }
     else if ( door1.y === door2.y ) { // Horizontal Hallway
       hallway = new Hallway( Math.abs( door1.x - door2.x ) - 1, 3 );
@@ -38,6 +41,8 @@ export default class Hallway extends Room {
       for ( let c = 0; c < hallway.width; c++ ) {
         hallway.tiles[ 1 ][ c ] = Tiles.FLOOR;
       }
+
+      hallway.orientation = Orientation.HORIZONTAL;
     }
     return hallway;
   }

@@ -1,13 +1,5 @@
 import Tiles from './Tiles';
-
-const RoomType = {
-  UNSET: -1,
-  START: 0,
-  BATTLE: 1,
-  ITEM: 2,
-  HALLWAY: 3,
-  END: 4
-};
+import { RoomType, Edge } from '../globals';
 
 /**
  * Each room in a dungeon has walls, floor, and doors. Also entities live
@@ -27,7 +19,8 @@ class Room {
     this.setPosition( 0, 0 );
 
     this.id = -1;
-    this.type = RoomType.UNSET;
+    this.type = RoomType.BATTLE;
+    this.entered = false;
 
     this.doors = [];
     this.tiles = [];
@@ -67,18 +60,29 @@ class Room {
 
   /**
    * Finds all the doors in the room and returns a list of their positions
-   * @return {Array} The list of door positions
    */
-  getDoorPositons() {
-    const doors = [];
-    for ( let r = 0; r < this.height; r++ ) {
-      for ( let c = 0; c < this.width; c++ ) {
-        if ( this.tiles[ r ][ c ] === Tiles.DOOR ) {
-          doors.push( { x: c, y: r } );
+  updateDoorPositions() {
+    this.doors = [];
+    for ( let y = 0; y < this.height; y++ ) {
+      for ( let x = 0; x < this.width; x++ ) {
+        if ( this.tiles[ y ][ x ] === Tiles.DOOR ) {
+          let edge = Edge.NONE;
+          if ( y === 0 ) {
+            edge = Edge.TOP;
+          }
+          else if ( y === this.height - 1 ) {
+            edge = Edge.BOTTOM;
+          }
+          else if ( x === 0 ) {
+            edge = Edge.LEFT;
+          }
+          else if ( x === this.width - 1 ) {
+            edge = Edge.RIGHT;
+          }
+          this.doors.push( { x: x, y: y, edge: edge } );
         }
       }
     }
-    return doors;
   }
 
   /**
@@ -123,33 +127,25 @@ class Room {
   }
 
   /**
-   * Determines if the current room is connected to the given room
-   * @param {Room} room The room to check a connection with
-   * @return {boolean} True if the rooms connect through a door
+   * Determines if the given coordinates is on the edge of the room
+   * @param {number} x The x-coordinate (in tile space)
+   * @param {number} y The y-coordinate (in tile space)
+   * @return {number} The Edge the coordinate lies on
    */
-  isConnectedTo( room ) {
-    for ( const door of this.getDoorPositons() ) {
-      // move the door into "world space" using current room's position
-      door.x += this.x;
-      door.y += this.y;
-
-      // move the door into other room's space by subtracting room's position
-      door.x -= room.x;
-      door.y -= room.y;
-
-      // make sure the position is valid for given room's tile array
-      if ( door.x < 0 || door.x > room.width - 1 ||
-        door.y < 0 || door.y > room.height - 1 ) {
-        continue;
-      }
-
-      // see if the tile is a door; if so, then current room and given room
-      // are connected
-      if ( room.tiles[ door.y ][ door.x ] === Tiles.DOOR ) {
-        return true;
-      }
+  getEdge( x, y ) {
+    if ( y === this.y ) {
+      return Edge.TOP;
     }
-    return false;
+    else if ( y === this.y + this.height - 1 ) {
+      return Edge.BOTTOM;
+    }
+    else if ( x === this.x ) {
+      return Edge.LEFT;
+    }
+    else if ( x === this.x + this.width - 1 ) {
+      return Edge.RIGHT;
+    }
+    return Edge.NONE;
   }
 }
 

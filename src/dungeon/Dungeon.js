@@ -1,22 +1,21 @@
 import Random from '../util/Random';
 import { Room, RoomType } from './Room';
 import Tiles from './Tiles';
-import { debugMap } from './Debug';
 import Hallway from './Hallway';
-import { NORTH, WEST, EAST, SOUTH } from '../globals';
+import { Direction } from '../globals';
 
 /**
  * The default config for the dungeon
  */
 const baseConfig = {
-  width: 50,
-  height: 50,
+  width: 55,
+  height: 55,
   randomSeed: undefined,
   doorPadding: 1,
   rooms: {
     width: { min: 7, max: 21, even: false },
-    height: { min: 7, max: 15, even: false },
-    maxArea: 150,
+    height: { min: 7, max: 17, even: false },
+    maxArea: 250,
     maxRooms: 50
   }
 };
@@ -25,7 +24,7 @@ const baseConfig = {
  * The minimum length of a hallway between two rooms
  * @type {number}
  */
-const MIN_HALL_LENGTH = 1;
+const MIN_HALL_LENGTH = 3;
 
 /**
  * The maximum length of a hallway between two rooms
@@ -98,8 +97,7 @@ export default class Dungeon {
 
     this.generate();
     this.tiles = this.getTiles();
-
-    debugMap( this );
+    this.rooms.forEach( ( room ) => room.updateDoorPositions() );
   }
 
   /**
@@ -232,18 +230,18 @@ export default class Dungeon {
       let direction;
       if ( room1.overlapsX( room2 ) ) {
         if ( room1.top < room2.top ) {
-          direction = NORTH;
+          direction = Direction.NORTH;
         }
         else {
-          direction = SOUTH;
+          direction = Direction.SOUTH;
         }
       }
       else if ( room1.overlapsY( room2 ) ) {
         if ( room1.left < room2.left ) {
-          direction = WEST;
+          direction = Direction.WEST;
         }
         else {
-          direction = EAST;
+          direction = Direction.EAST;
         }
       }
       else {
@@ -422,19 +420,19 @@ export default class Dungeon {
 
     // Randomly position this room on one of the sides of the random room
     switch ( direction ) {
-      case NORTH:
+      case Direction.NORTH:
         x = this.r.randInt( r.left - ( room.width - 1 ) + pad, r.right - pad );
         y = r.top - room.height - dist;
         break;
-      case WEST:
+      case Direction.WEST:
         x = r.left - room.width - dist;
         y = this.r.randInt( r.top - ( room.height - 1 ) + pad, r.bottom - pad );
         break;
-      case EAST:
+      case Direction.EAST:
         x = r.right + 1 + dist;
         y = this.r.randInt( r.top - ( room.height - 1 ) + pad, r.bottom - pad );
         break;
-      case SOUTH:
+      case Direction.SOUTH:
         x = this.r.randInt( r.left - ( room.width - 1 ) + pad, r.right - pad );
         y = r.bottom + 1 + dist;
         break;
@@ -460,7 +458,7 @@ export default class Dungeon {
     const door1 = { x: -1, y: -1 };
     const door2 = { x: -1, y: -1 };
 
-    if ( NORTH === direction ) {
+    if ( Direction.NORTH === direction ) {
       door1.x = door2.x = this.r.randInt(
         Math.floor( Math.max( room2.left, room1.left ) + this.doorPadding ),
         Math.floor( Math.min( room2.right, room1.right ) - this.doorPadding )
@@ -468,7 +466,7 @@ export default class Dungeon {
       door1.y = room1.y + room1.height - 1;
       door2.y = room2.y;
     }
-    else if ( WEST === direction ) {
+    else if ( Direction.WEST === direction ) {
       door1.x = room1.x + room1.width - 1;
       door2.x = room2.x;
       door1.y = door2.y = this.r.randInt(
@@ -476,7 +474,7 @@ export default class Dungeon {
         Math.floor( Math.min( room2.bottom, room1.bottom ) - this.doorPadding )
       );
     }
-    else if ( EAST === direction ) {
+    else if ( Direction.EAST === direction ) {
       // East
       door1.x = room1.x;
       door2.x = room2.x + room2.width - 1;
@@ -485,7 +483,7 @@ export default class Dungeon {
         Math.floor( Math.min( room2.bottom, room1.bottom ) - this.doorPadding )
       );
     }
-    else if ( SOUTH === direction ) {
+    else if ( Direction.SOUTH === direction ) {
       // South
       door1.x = door2.x = this.r.randInt(
         Math.floor( Math.max( room2.left, room1.left ) + this.doorPadding ),
