@@ -39,6 +39,11 @@ export default class BootScene extends Phaser.Scene {
     this.load.image( 'logo', 'assets/logo.png' );
     this.load.script( 'webfont',
       'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js' );
+    this.load.image( {
+      key: 'dungeon_tiles',
+      url: 'assets/dungeon-tileset-ext.png',
+      normalMap: 'assets/dungeon-tileset-ext_n.png'
+    } );
 
     // TODO: DELETE THIS SAMPLE
     this.load.atlas( 'sample-sprites', 'assets/sample-sprites.png',

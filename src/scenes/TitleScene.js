@@ -26,6 +26,7 @@ export default class TitleScene extends Phaser.Scene {
    * @override
    */
   create() {
+    this.scene.setVisible( false );
     this.keys = KeyBinding.createKeys( this, [ 'up', 'down', 'space' ] );
     const { width, height } = this.game.config;
 
@@ -49,6 +50,7 @@ export default class TitleScene extends Phaser.Scene {
           fontFamily: 'Rye'
         } );
         titleText.setShadow( 0, 2, '#000', 10 );
+        this.scene.setVisible( true );
       }
     } );
 
