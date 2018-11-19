@@ -9,6 +9,7 @@ import { Orientation, RoomType, Edge } from '../globals';
 import TILES from '../dungeon/TileMappings';
 import TilemapVisibility from '../dungeon/TilemapVisibility';
 import LightPipeline from '../util/LightPipeline';
+import { Player } from '../entity';
 
 /**
  * The game scene is the main scene used when the player is in actual game play.
@@ -51,7 +52,7 @@ export default class GameScene extends Phaser.Scene {
    * @override
    */
   update( time, delta ) {
-    // Example code, remove later
+    // NOTE: Example code, remove later
     // if ( this.keys.up.isDown && this.keys.up.repeats === 1 ) {
     //   this.playMinigame( 'DanceDance' );
     // }
@@ -62,50 +63,8 @@ export default class GameScene extends Phaser.Scene {
     //   this.playMinigame( 'DanceDance', Difficulty.ADVANCED );
     // }
 
-    this.updatePlayer();
+    this.player.update( time, delta );
     this.updateMapVisibility();
-  }
-
-  /**
-   * Updates the velocity and position of the player
-   */
-  updatePlayer() {
-    const speed = 200;
-
-    // Stop any previous movement from the last frame
-    this.player.body.setVelocity( 0 );
-
-    // Allow player to move themselves
-    if ( !this.playerDest ) {
-      // Horizontal movement
-      if ( this.keys.left.isDown ) {
-        this.player.body.setVelocityX( -speed );
-      }
-      else if ( this.keys.right.isDown ) {
-        this.player.body.setVelocityX( speed );
-      }
-
-      // Vertical movement
-      if ( this.keys.up.isDown ) {
-        this.player.body.setVelocityY( -speed );
-      }
-      else if ( this.keys.down.isDown ) {
-        this.player.body.setVelocityY( speed );
-      }
-    }
-    // Automatically move player into a battle room and lock doors
-    else {
-      this.player.body.setVelocityX( this.playerDest.x - this.player.x );
-      this.player.body.setVelocityY( this.playerDest.y - this.player.y );
-      if ( this.player.body.velocity.length() < 1 ) {
-        this.lockRoom( this.playerDest.room );
-        this.playerDest = null;
-      }
-    }
-
-    // Normalize and scale the velocity so that sprite can't move
-    // faster along a diagonal
-    this.player.body.velocity.normalize().scale( speed );
   }
 
   /**
@@ -120,31 +79,34 @@ export default class GameScene extends Phaser.Scene {
       if ( !playerRoom.entered && playerRoom.type === RoomType.BATTLE ) {
         const edge = playerRoom.getEdge( playerTileX, playerTileY );
         if ( Edge.TOP === edge ) {
-          this.playerDest = {
-            x: this.player.x,
-            y: this.player.y + this.map.tileHeight * 2
-          };
+          this.player.setDestination(
+            this.player.x,
+            this.player.y + this.map.tileHeight * 2,
+            playerRoom
+          );
         }
         else if ( Edge.BOTTOM === edge ) {
-          this.playerDest = {
-            x: this.player.x,
-            y: this.player.y - this.map.tileHeight * 2
-          };
+          this.player.setDestination(
+            this.player.x,
+            this.player.y - this.map.tileHeight * 2,
+            playerRoom
+          );
         }
         else if ( Edge.LEFT === edge ) {
-          this.playerDest = {
-            x: this.player.x + this.map.tileWidth * 2,
-            y: this.player.y
-          };
+          this.player.setDestination(
+            this.player.x + this.map.tileWidth * 2,
+            this.player.y,
+            playerRoom
+          );
         }
         // Right
         else if ( Edge.RIGHT === edge ) {
-          this.playerDest = {
-            x: this.player.x - this.map.tileWidth * 2,
-            y: this.player.y
-          };
+          this.player.setDestination(
+            this.player.x - this.map.tileWidth * 2,
+            this.player.y,
+            playerRoom
+          );
         }
-        this.playerDest.room = playerRoom;
       }
     }
     playerRoom.entered = true;
@@ -155,20 +117,36 @@ export default class GameScene extends Phaser.Scene {
    * @param {Room} room The room to lock
    */
   lockRoom( room ) {
-    const { x, y } = room;
-    room.doors.forEach( ( door ) => {
-      // Top or Bottom
-      if ( door.edge === Edge.TOP || door.edge === Edge.BOTTOM ) {
-        this.stuffLayer.putTilesAt( TILES.GATE.HORIZONTAL, x + door.x - 1,
-          y + door.y );
-      }
-      // Left or Right
-      else if ( door.edge === Edge.LEFT || door.edge === Edge.RIGHT ) {
-        this.stuffLayer.putTilesAt( TILES.GATE.VERTICAL, x + door.x,
-          y + door.y - 1 );
-      }
-    } );
-    this.stuffCollider.update();
+    const duration = 750;
+    const { x, y, doors, centerX, centerY } = room;
+
+    this.player.movementDisabled = true;
+
+    const camera = this.cameras.main;
+    camera.stopFollow();
+    camera.pan(
+      this.map.tileToWorldX( centerX + 0.5 ),
+      this.map.tileToWorldY( centerY + 0.5 ),
+      duration, 'Linear'
+    );
+
+    setTimeout( () => {
+      camera.shake( 200, 0.0025 );
+      doors.forEach( ( door ) => {
+        // Top or Bottom
+        if ( door.edge === Edge.TOP || door.edge === Edge.BOTTOM ) {
+          this.stuffLayer.putTilesAt( TILES.GATE.HORIZONTAL, x + door.x - 1,
+            y + door.y );
+        }
+        // Left or Right
+        else if ( door.edge === Edge.LEFT || door.edge === Edge.RIGHT ) {
+          this.stuffLayer.putTilesAt( TILES.GATE.VERTICAL, x + door.x,
+            y + door.y - 1 );
+        }
+      } );
+      this.stuffCollider.update();
+      this.player.movementDisabled = false;
+    }, duration );
   }
 
   /**
@@ -360,7 +338,12 @@ export default class GameScene extends Phaser.Scene {
   createPlayer() {
     const sX = this.map.tileToWorldX( this.dungeon.startRoom.centerX );
     const sY = this.map.tileToWorldY( this.dungeon.startRoom.centerY );
-    this.player = this.add.rectangle( sX, sY, 16, 16, 0xAAEEDD );
+    this.player = new Player( {
+      scene: this,
+      key: 'sample-sprites',
+      x: sX,
+      y: sY
+    } );
     this.physics.add.existing( this.player );
 
     this.physics.add.collider( this.player, this.groundLayer );

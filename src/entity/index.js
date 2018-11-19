@@ -1,10 +1,10 @@
 import { Entity, INVINCIBLE } from './Entity';
 import Enemy from './Enemy';
-import SampleEntity from './SampleEntity'; // TODO: DELETE THIS SAMPLE
+import Player from './Player';
 
 export {
   Entity,
   INVINCIBLE,
   Enemy,
-  SampleEntity // TODO: DELETE THIS SAMPLE
+  Player
 };
