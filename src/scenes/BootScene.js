@@ -1,4 +1,6 @@
 import { createAnimations } from '../util/Animation';
+import { DanceDance } from '../minigames';
+import LightPipeline from '../util/LightPipeline';
 
 /**
  * The boot scene, or splash screen, is used to initialize most of the game
@@ -36,7 +38,7 @@ export default class BootScene extends Phaser.Scene {
     } );
 
     // Load all assets here
-    this.load.image( 'logo', 'assets/logo.png' );
+    this.load.image( 'enemy', 'assets/enemy.png' );
     this.load.script( 'webfont',
       'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js' );
     this.load.image( {
@@ -48,5 +50,12 @@ export default class BootScene extends Phaser.Scene {
     // TODO: DELETE THIS SAMPLE
     this.load.atlas( 'sample-sprites', 'assets/sample-sprites.png',
       'assets/sample-sprites.json' );
+
+    this.scene.add( 'DanceDance', DanceDance );
+    this.game.renderer.addPipeline( 'LightPipeline', new LightPipeline( {
+      game: this.game,
+      renderer: this.game.renderer,
+      maxLights: 10
+    } ) );
   }
 }

@@ -1,4 +1,5 @@
 import { Entity } from './';
+import HealthBar from '../battle/HealthBar';
 
 /**
  * Base class for all player interactions
@@ -12,6 +13,30 @@ export default class Player extends Entity {
     this.anims.play( 'sample' );
     this.speed = 200;
     this.movementDisabled = false;
+    this.setHealth( 10 );
+    this.scene = config.scene;
+    this.drawPlayerHUD();
+  }
+
+  /**
+   * Draws the player HUD
+   */
+  drawPlayerHUD() {
+    const { width } = this.scene.game.config;
+    const HUD_X = -width;
+
+    const healthTxt = this.scene.add.text(
+      HUD_X + 10, 10, 'Health', {
+        fontSize: '12px',
+        color: '#FFF'
+      }
+    );
+
+    this.healthBar = new HealthBar( this.scene, {
+      x: healthTxt.x + healthTxt.width + 10,
+      y: 12,
+      height: 10
+    } );
   }
 
   /**
@@ -43,9 +68,12 @@ export default class Player extends Entity {
     else if ( this.dest ) {
       this.body.setVelocityX( this.dest.x - this.x );
       this.body.setVelocityY( this.dest.y - this.y );
-      if ( this.body.velocity.length() < 1 ) {
+      if ( this.body.velocity.length() < 2 ) {
         this.movementDisabled = false;
-        this.scene.lockRoom( this.dest.room );
+        if ( typeof this.movementCallback === 'function' ) {
+          this.movementCallback();
+          this.movementCallback = null;
+        }
         this.dest = null;
       }
     }
@@ -56,17 +84,34 @@ export default class Player extends Entity {
   }
 
   /**
+   * @override
+   */
+  injure( damage ) {
+    super.injure( damage );
+    this.healthBar.setPercent( this.health / this.maxHealth );
+  }
+
+  /**
+   * @override
+   */
+  slay() {
+    this.alive = false;
+  }
+
+  /**
    * Sets the destination for the player to move to
    * @param {number} x The x-coordinate
    * @param {number} y The y-coordinate
    * @param {Room} room The room the player is in
+   * @param {*} callback The callback when the movement is finished
    */
-  setDestination( x, y, room ) {
+  setDestination( x, y, room, callback ) {
     this.dest = {
       x: x,
       y: y,
       room: room
     };
     this.movementDisabled = true;
+    this.movementCallback = callback;
   }
 }

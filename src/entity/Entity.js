@@ -33,6 +33,15 @@ class Entity extends Phaser.GameObjects.Sprite {
   }
 
   /**
+   * Sets the current health and max health of the entity
+   * @param {number} amount The amount of health the entity has
+   */
+  setHealth( amount ) {
+    this.maxHealth = amount;
+    this.health = amount;
+  }
+
+  /**
    * Heals the current entity by the given amount
    * @param  {number} amount The amount the heal the entity by
    */
@@ -56,6 +65,9 @@ class Entity extends Phaser.GameObjects.Sprite {
 
     // take either the min health (0), or the subtracted amount
     this.health = Math.max( this.health - amount, 0 );
+    if ( this.health === 0 ) {
+      this.slay();
+    }
   }
 
   /**

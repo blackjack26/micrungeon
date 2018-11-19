@@ -1,15 +1,11 @@
-import {
-  DanceDance,
-  Difficulty
-} from '../minigames';
 import KeyBinding from '../util/KeyBinding';
 import Dungeon from '../dungeon/Dungeon';
 import Hallway from '../dungeon/Hallway';
 import { Orientation, RoomType, Edge } from '../globals';
 import TILES from '../dungeon/TileMappings';
 import TilemapVisibility from '../dungeon/TilemapVisibility';
-import LightPipeline from '../util/LightPipeline';
 import { Player } from '../entity';
+import Battle from '../battle/Battle';
 
 /**
  * The game scene is the main scene used when the player is in actual game play.
@@ -27,44 +23,44 @@ export default class GameScene extends Phaser.Scene {
    * @override
    */
   preload() {
-    // Load all mini games here, possibly move to BootScene
-    this.scene.add( 'DanceDance', DanceDance );
 
-    this.game.renderer.addPipeline( 'LightPipeline', new LightPipeline( {
-      game: this.game,
-      renderer: this.game.renderer,
-      maxLights: 10
-    } ) );
   }
 
   /**
    * @override
    */
   create() {
+    this.inCombat = false;
     this.keys = KeyBinding.createKeys( this,
-      [ 'up', 'left', 'right', 'down' ] );
+      [ 'up', 'left', 'right', 'down', 'space' ] );
     this.createDungeonMap();
     this.createPlayer();
     this.formatCamera();
+    this.enemyGroup = this.add.group();
+    this.configCameraHUD();
   }
 
   /**
    * @override
    */
   update( time, delta ) {
-    // NOTE: Example code, remove later
-    // if ( this.keys.up.isDown && this.keys.up.repeats === 1 ) {
-    //   this.playMinigame( 'DanceDance' );
-    // }
-    // else if ( this.keys.left.isDown && this.keys.left.repeats === 1 ) {
-    //   this.playMinigame( 'DanceDance', Difficulty.INTERMEDIATE );
-    // }
-    // else if ( this.keys.right.isDown && this.keys.right.repeats === 1 ) {
-    //   this.playMinigame( 'DanceDance', Difficulty.ADVANCED );
-    // }
+    if ( this.battle && this.battle.active ) {
+      this.battle.update();
+    }
+    else {
+      this.player.update( time, delta );
+      this.updateMapVisibility();
+    }
+  }
 
-    this.player.update( time, delta );
-    this.updateMapVisibility();
+  /**
+   * Creates the HUD camera
+   */
+  configCameraHUD() {
+    const { width, height } = this.game.config;
+    const HUD_X = -width;
+    const hudCamera = this.cameras.add( 0, 0, width, height, false, 'HUD' );
+    hudCamera.scrollX = HUD_X;
   }
 
   /**
@@ -82,21 +78,24 @@ export default class GameScene extends Phaser.Scene {
           this.player.setDestination(
             this.player.x,
             this.player.y + this.map.tileHeight * 2,
-            playerRoom
+            playerRoom,
+            () => { this.beginCombat( playerRoom ); }
           );
         }
         else if ( Edge.BOTTOM === edge ) {
           this.player.setDestination(
             this.player.x,
             this.player.y - this.map.tileHeight * 2,
-            playerRoom
+            playerRoom,
+            () => { this.beginCombat( playerRoom ); }
           );
         }
         else if ( Edge.LEFT === edge ) {
           this.player.setDestination(
             this.player.x + this.map.tileWidth * 2,
             this.player.y,
-            playerRoom
+            playerRoom,
+            () => { this.beginCombat( playerRoom ); }
           );
         }
         // Right
@@ -104,7 +103,8 @@ export default class GameScene extends Phaser.Scene {
           this.player.setDestination(
             this.player.x - this.map.tileWidth * 2,
             this.player.y,
-            playerRoom
+            playerRoom,
+            () => { this.beginCombat( playerRoom ); }
           );
         }
       }
@@ -113,40 +113,20 @@ export default class GameScene extends Phaser.Scene {
   }
 
   /**
-   * Adds the doors to the room to lock the player in for battle
-   * @param {Room} room The room to lock
+   * Begins combat inside of a battle room
+   * @param  {Room} room The room to begin a battle in
    */
-  lockRoom( room ) {
-    const duration = 750;
-    const { x, y, doors, centerX, centerY } = room;
+  beginCombat( room ) {
+    this.battle = new Battle( room, this );
+    this.battle.begin();
+  }
 
-    this.player.movementDisabled = true;
-
-    const camera = this.cameras.main;
-    camera.stopFollow();
-    camera.pan(
-      this.map.tileToWorldX( centerX + 0.5 ),
-      this.map.tileToWorldY( centerY + 0.5 ),
-      duration, 'Linear'
-    );
-
-    setTimeout( () => {
-      camera.shake( 200, 0.0025 );
-      doors.forEach( ( door ) => {
-        // Top or Bottom
-        if ( door.edge === Edge.TOP || door.edge === Edge.BOTTOM ) {
-          this.stuffLayer.putTilesAt( TILES.GATE.HORIZONTAL, x + door.x - 1,
-            y + door.y );
-        }
-        // Left or Right
-        else if ( door.edge === Edge.LEFT || door.edge === Edge.RIGHT ) {
-          this.stuffLayer.putTilesAt( TILES.GATE.VERTICAL, x + door.x,
-            y + door.y - 1 );
-        }
-      } );
-      this.stuffCollider.update();
-      this.player.movementDisabled = false;
-    }, duration );
+  /**
+   * Ends the combat inside of the battle room
+   */
+  endCombat() {
+    this.battle.end()
+      .then( () => this.battle = null );
   }
 
   /**
@@ -367,34 +347,12 @@ export default class GameScene extends Phaser.Scene {
   }
 
   /**
-   * Opens the given mini game and pauses the game until mini game is over
-   * @param {string} name The name of the mini game
-   * @param {number} difficulty The difficulty of the mini game
+   * Called when the player is dead
    */
-  playMinigame( name, difficulty = Difficulty.EASY ) {
-    this.currentMinigame = this.scene.get( name );
-    if ( !this.currentMinigame ) {
-      return;
-    }
-
-    this.scene.launch( name, {
-      parent: this,
-      difficulty: difficulty
-    } );
-    this.scene.bringToTop( name );
-    this.scene.pause();
-    console.log( 'Play MiniGame' );
-  }
-
-  /**
-   * Stops the current mini game and resumes the game
-   * @param {object} result The result of the mini game
-   */
-  continueCombat( result ) {
-    console.log( 'MiniGame Results:', result );
-    this.scene.stop( this.currentMinigame.key );
-    this.input.keyboard.resetKeys();
-    this.scene.resume();
-    console.log( 'Resume Combat' );
+  gameOver() {
+    setTimeout( () => {
+      this.battle = null;
+      this.scene.start( 'TitleScene' );
+    }, 200 );
   }
 }
