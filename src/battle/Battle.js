@@ -2,6 +2,7 @@ import { Difficulty } from '../minigames';
 import Random from '../util/Random';
 import { Edge } from '../globals';
 import TILES from '../dungeon/TileMappings';
+import BattleDrop from './BattleDrop';
 
 /**
  * This class manages the battle and combat logic.
@@ -98,6 +99,15 @@ export default class Battle {
     return this.centerCameraOnPlayer()
       .then( () => {
         this.active = false;
+
+        const { centerX, centerY } = this.room;
+        const n = new Random().randInt( 1, 3 );
+        for ( let i = 0; i < n; i++ ) {
+          const cX =
+            this.scene.map.tileToWorldX( centerX + 0.5 + i - ( n / 2 ) );
+          const cY = this.scene.map.tileToWorldY( centerY + 0.5 );
+          BattleDrop.drop( cX, cY, this.scene );
+        }
       } );
   }
 
@@ -262,6 +272,7 @@ export default class Battle {
    */
   performEnemyAttack( enemies, index ) {
     this.scene.cameras.main.shake( 200, 0.0025 );
+    this.scene.cameras.main.flash( 200, 150, 0, 0 );
 
     const r = new Random();
     const damage = r.randInt( 1, 3 );

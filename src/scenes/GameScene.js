@@ -6,6 +6,7 @@ import TILES from '../dungeon/TileMappings';
 import TilemapVisibility from '../dungeon/TilemapVisibility';
 import { Player } from '../entity';
 import Battle from '../battle/Battle';
+import Injection from '../entity/items/Injection';
 
 /**
  * The game scene is the main scene used when the player is in actual game play.

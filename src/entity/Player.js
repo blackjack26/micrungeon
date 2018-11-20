@@ -10,11 +10,12 @@ export default class Player extends Entity {
    */
   constructor( config ) {
     super( config );
-    this.anims.play( 'sample' );
+    this.scene = config.scene;
     this.speed = 200;
     this.movementDisabled = false;
+    this.items = [];
+    this.anims.play( 'sample' );
     this.setHealth( 10 );
-    this.scene = config.scene;
     this.drawPlayerHUD();
   }
 
@@ -88,6 +89,14 @@ export default class Player extends Entity {
    */
   injure( damage ) {
     super.injure( damage );
+    this.healthBar.setPercent( this.health / this.maxHealth );
+  }
+
+  /**
+   * @override
+   */
+  heal( amount ) {
+    super.heal( amount );
     this.healthBar.setPercent( this.health / this.maxHealth );
   }
 

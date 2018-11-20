@@ -39,6 +39,11 @@ export default class BootScene extends Phaser.Scene {
 
     // Load all assets here
     this.load.image( 'enemy', 'assets/enemy.png' );
+    this.load.image( {
+      key: 'injection',
+      url: 'assets/items/injection/injection.png',
+      normalMap: 'assets/items/injection/injection_n.png'
+    } );
     this.load.script( 'webfont',
       'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js' );
     this.load.image( {
