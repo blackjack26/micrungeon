@@ -1,5 +1,7 @@
 import Tiles from './Tiles';
 import { RoomType, Edge } from '../globals';
+import Random from '../util/Random';
+import { Enemy } from '../entity';
 
 /**
  * Each room in a dungeon has walls, floor, and doors. Also entities live
@@ -146,6 +148,36 @@ class Room {
       return Edge.RIGHT;
     }
     return Edge.NONE;
+  }
+
+  /**
+   * [spawnEnemies description]
+   * @param  {[type]} scene [description]
+   */
+  spawnEnemies( scene ) {
+    if ( this.type !== RoomType.BATTLE ) {
+      return;
+    }
+
+    const rand = new Random();
+    for ( let i = 0; i < rand.randInt( 1, 3 ); i++ ) {
+      const x = scene.map.tileToWorldX(
+        rand.randInt( this.x + 2, this.x + this.width - 2 )
+      );
+      const y = scene.map.tileToWorldY(
+        rand.randInt( this.y + 2, this.y + this.height - 2 )
+      );
+      const enemy = new Enemy( {
+        scene: scene,
+        key: 'enemy',
+        x: x,
+        y: y
+      } );
+      enemy.miniGames.push( 'DanceDance' ); // TODO: Change based on enemy type
+      enemy.setHealth( 3 ); // TODO: Change based on enemy type
+      enemy.setInteractive( { useHandCursor: true } );
+      scene.enemyGroup.add( enemy );
+    }
   }
 }
 

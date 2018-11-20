@@ -1,4 +1,5 @@
 import { Entity } from './';
+import HealthBar from '../battle/HealthBar';
 
 /**
  * Generic enemy class for all enemies to extend
@@ -15,6 +16,47 @@ export default class Enemy extends Entity {
      * @type {Array}
      */
     this.miniGames = [];
+    this.healthBar = new HealthBar( config.scene, {
+      x: config.x - 25, y: config.y - this.height / 2 - 10,
+      width: 50, height: 5
+    } );
+    this.scene = config.scene;
+    this.selected = false;
+  }
+
+  /**
+   * Selects the enemy
+   */
+  select() {
+    if ( this.selected ) {
+      return;
+    }
+
+    this.outline = this.scene.add
+      .rectangle( this.x, this.y, this.width, this.height );
+    this.outline.setStrokeStyle( 1, 0xFFFF00, 0.75 );
+    this.outline.setOrigin( 0.5, 0.5 );
+    this.outline.update();
+    this.selected = true;
+  }
+
+  /**
+   * Deselect the enemy
+   */
+  deselect() {
+    if ( !this.selected ) {
+      return;
+    }
+    this.outline.destroy();
+    this.selected = false;
+  }
+
+  /**
+   * @override
+   */
+  injure( amount ) {
+    super.injure( amount );
+    this.healthBar.setPercent( this.health / this.maxHealth );
   }
 
   /**
@@ -30,8 +72,15 @@ export default class Enemy extends Entity {
    * @override
    */
   slay() {
-    this.scene.enemyGroup.remove( this );
-    super.slay();
+    this.active = false;
+
+    // Wait for health bar to finish
+    setTimeout( () => {
+      this.healthBar.destroy();
+      this.outline.destroy();
+      this.scene.enemyGroup.remove( this );
+      super.slay();
+    }, this.healthBar.config.animationDuration );
   }
 
   /**
