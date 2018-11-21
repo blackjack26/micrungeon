@@ -47,6 +47,8 @@ export default class BootScene extends Phaser.Scene {
       normalMap: 'assets/dungeon-tileset-ext_n.png'
     } );
 
+    this.loadItems();
+
     // TODO: DELETE THIS SAMPLE
     this.load.atlas( 'sample-sprites', 'assets/sample-sprites.png',
       'assets/sample-sprites.json' );
@@ -57,5 +59,21 @@ export default class BootScene extends Phaser.Scene {
       renderer: this.game.renderer,
       maxLights: 10
     } ) );
+  }
+
+  /**
+   * Loads the items
+   */
+  loadItems() {
+    this.load.image( {
+      key: 'injection',
+      url: 'assets/items/injection/injection.png',
+      normalMap: 'assets/items/injection/injection_n.png'
+    } );
+    this.load.image( {
+      key: 'timelapse',
+      url: 'assets/items/timelapse/timelapse.png',
+      normalMap: 'assets/items/timelapse/timelapse_n.png'
+    } );
   }
 }

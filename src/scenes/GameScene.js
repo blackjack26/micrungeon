@@ -6,6 +6,9 @@ import TILES from '../dungeon/TileMappings';
 import TilemapVisibility from '../dungeon/TilemapVisibility';
 import { Player } from '../entity';
 import Battle from '../battle/Battle';
+import BattleDrop from '../battle/BattleDrop';
+import InventoryScene from './InventoryScene';
+import { ItemType } from '../entity/items';
 
 /**
  * The game scene is the main scene used when the player is in actual game play.
@@ -23,7 +26,7 @@ export default class GameScene extends Phaser.Scene {
    * @override
    */
   preload() {
-
+    this.scene.add( 'InventoryScene', InventoryScene );
   }
 
   /**
@@ -32,7 +35,7 @@ export default class GameScene extends Phaser.Scene {
   create() {
     this.inCombat = false;
     this.keys = KeyBinding.createKeys( this,
-      [ 'up', 'left', 'right', 'down', 'space' ] );
+      [ 'up', 'left', 'right', 'down', 'space', 'interact' ] );
     this.createDungeonMap();
     this.createPlayer();
     this.formatCamera();
@@ -50,6 +53,40 @@ export default class GameScene extends Phaser.Scene {
     else {
       this.player.update( time, delta );
       this.updateMapVisibility();
+    }
+
+    if ( this.keys.interact.isDown ) {
+      this.openInventory();
+    }
+  }
+
+  /**
+   * Opens the inventory
+   */
+  openInventory() {
+    this.input.keyboard.resetKeys();
+    this.scene
+      .launch( 'InventoryScene', {
+        parent: this,
+        inventory: this.player.inventory,
+        context: ItemType.ANY
+      } )
+      .bringToTop( 'InventoryScene' )
+      .pause();
+  }
+
+  /**
+   * Closes the inventory
+   * @param {Item} item The item selected from the inventory
+   */
+  closeInventory( item ) {
+    this.scene.stop( 'InventoryScene' );
+    this.input.keyboard.resetKeys();
+    this.scene.resume();
+
+    if ( item && item.itemType === ItemType.ANY ) {
+      item.use( { player: this.player } );
+      this.player.inventory.items.splice( item.inventoryIndex, 1 );
     }
   }
 
@@ -329,6 +366,8 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.collider( this.player, this.groundLayer );
     this.stuffCollider =
       this.physics.add.collider( this.player, this.stuffLayer );
+
+    BattleDrop.drop( sX - 25, sY - 25, this );
   }
 
   /**

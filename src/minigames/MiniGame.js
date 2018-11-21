@@ -1,13 +1,11 @@
-const Difficulty = {
-  EASY: 1,
-  INTERMEDIATE: 2,
-  ADVANCED: 3
-};
+import { ItemType } from '../entity/items';
+import KeyBinding from '../util/KeyBinding';
+import { Difficulty } from '../globals';
 
 /**
  * Base class for all mini games
  */
-class MiniGame extends Phaser.Scene {
+export default class MiniGame extends Phaser.Scene {
   /**
    * Creates a mini game within the current scene
    * @param {string} key - The scene key
@@ -24,6 +22,7 @@ class MiniGame extends Phaser.Scene {
     this.x = 25;
     this.y = 25;
     this.difficulty = Difficulty.EASY;
+    this.timeScale = 1;
   }
 
   /**
@@ -53,13 +52,15 @@ class MiniGame extends Phaser.Scene {
     );
 
     // Show text for 1 second, then start mini game
-    setTimeout( () => {
+    this.startTimeout = setTimeout( () => {
       this.startGame();
     }, 1000 );
 
     this.timerBar = this.add.graphics();
     this.timerBar.fillStyle( 0xFFFFFF, 0.4 );
     this.timerBar.fillRect( this.x, this.h - 10 - this.y, this.w - 50, 10 );
+
+    this.keys = KeyBinding.createKeys( this, [ 'interact' ] );
   }
 
   /**
@@ -73,7 +74,7 @@ class MiniGame extends Phaser.Scene {
         if ( this.elapsedTime > this.duration ) {
           this.lose();
         }
-        this.elapsedTime += delta;
+        this.elapsedTime += delta * this.timeScale;
 
         this.timerBar.clear();
         this.timerBar.fillStyle( 0xFFFFFF, 0.4 );
@@ -85,6 +86,46 @@ class MiniGame extends Phaser.Scene {
         );
       }
       this.updateMiniGame( time, delta );
+    }
+    else if ( this.keys.interact.isDown ) {
+      this.openInventory();
+    }
+  }
+
+  /**
+   * Opens the inventory
+   */
+  openInventory() {
+    clearTimeout( this.startTimeout );
+    this.input.keyboard.resetKeys();
+    this.scene
+      .launch( 'InventoryScene', {
+        parent: this,
+        inventory: this.parent.scene.player.inventory,
+        context: ItemType.MINIGAME
+      } )
+      .bringToTop( 'InventoryScene' )
+      .pause();
+  }
+
+  /**
+   * Closes the inventory
+   * @param {Item} item The item selected from the inventory
+   */
+  closeInventory( item ) {
+    this.scene.stop( 'InventoryScene' );
+    this.input.keyboard.resetKeys();
+    this.scene.resume();
+
+    if ( item && item.itemType === ItemType.MINIGAME ) {
+      item.use( { minigame: this } );
+      this.parent.scene.player.inventory.items.splice( item.inventoryIndex, 1 );
+      this.startGame();
+    }
+    else {
+      this.startTimeout = setTimeout( () => {
+        this.startGame();
+      }, 1000 );
     }
   }
 
@@ -138,10 +179,6 @@ class MiniGame extends Phaser.Scene {
     this.timerBar.destroy();
     this.elapsedTime = 0;
     this.started = false;
+    this.timeScale = 1;
   }
 }
-
-module.exports = {
-  MiniGame: MiniGame,
-  Difficulty: Difficulty
-};

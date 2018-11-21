@@ -262,6 +262,7 @@ export default class Battle {
    */
   performEnemyAttack( enemies, index ) {
     this.scene.cameras.main.shake( 200, 0.0025 );
+    this.scene.cameras.main.flash( 200, 150, 0, 0 );
 
     const r = new Random();
     const damage = r.randInt( 1, 3 );
