@@ -1,4 +1,5 @@
 import Item from './Item';
+import { ItemType } from './';
 
 /**
  * This is a health booster that can only be used when the player has health
@@ -14,27 +15,23 @@ export default class Injection extends Item {
   constructor( x, y, scene ) {
     super( {x: x, y: y, scene: scene, key: 'injection'} );
     this.amount = 5;
-    this.scene.physics.add.existing( this );
-    this.collider = this.scene.physics
-      .add.collider( this, this.scene.player, this.onCollide );
-    this.setPipeline( 'LightPipeline' );
+    this.itemType = ItemType.ANY;
+    this.name = 'Injection';
   }
 
   /**
-   * Called when the player collides with the injection.
-   * @param  {Injection} item The injection item
-   * @param  {Player} player The player class
+   * Uses the item to either heal or hurt the player
+   * @param  {object} config The configuration passed in
    */
-  onCollide( item, player ) {
+  use( config ) {
+    const player = config.player;
     if ( player.health === player.maxHealth ) {
-      player.injure( item.amount );
-      item.scene.cameras.main.shake( 200, 0.0025 );
-      item.scene.cameras.main.flash( 200, 150, 0, 0 );
+      player.injure( this.amount );
+      player.scene.cameras.main.shake( 200, 0.0025 );
+      player.scene.cameras.main.flash( 200, 150, 0, 0 );
     }
     else {
-      player.heal( item.amount );
+      player.heal( this.amount );
     }
-    item.collider.destroy();
-    item.destroy();
   }
 }

@@ -26,4 +26,10 @@ const RoomType = {
   END: 4
 };
 
-export { Direction, Orientation, RoomType, Edge };
+const Difficulty = {
+  EASY: 1,
+  INTERMEDIATE: 2,
+  ADVANCED: 3
+};
+
+export { Direction, Orientation, RoomType, Edge, Difficulty };

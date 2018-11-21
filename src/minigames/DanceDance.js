@@ -1,4 +1,4 @@
-import { MiniGame, Difficulty } from './MiniGame';
+import { Difficulty, MiniGame } from './';
 
 /**
  * The Dance Dance mini game is like DDR and the player needs to complete the

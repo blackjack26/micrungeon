@@ -1,5 +1,6 @@
 import { Entity } from './';
 import HealthBar from '../battle/HealthBar';
+import { Inventory } from './items';
 
 /**
  * Base class for all player interactions
@@ -11,9 +12,9 @@ export default class Player extends Entity {
   constructor( config ) {
     super( config );
     this.scene = config.scene;
+    this.inventory = new Inventory();
     this.speed = 200;
     this.movementDisabled = false;
-    this.items = [];
     this.anims.play( 'sample' );
     this.setHealth( 10 );
     this.drawPlayerHUD();

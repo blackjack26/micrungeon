@@ -1,5 +1,6 @@
 import { Entity } from './';
 import HealthBar from '../battle/HealthBar';
+import BattleDrop from '../battle/BattleDrop';
 
 /**
  * Generic enemy class for all enemies to extend
@@ -76,6 +77,7 @@ export default class Enemy extends Entity {
 
     // Wait for health bar to finish
     setTimeout( () => {
+      BattleDrop.drop( this.x, this.y, this.scene );
       this.healthBar.destroy();
       this.outline.destroy();
       this.scene.enemyGroup.remove( this );

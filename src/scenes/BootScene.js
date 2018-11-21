@@ -39,11 +39,6 @@ export default class BootScene extends Phaser.Scene {
 
     // Load all assets here
     this.load.image( 'enemy', 'assets/enemy.png' );
-    this.load.image( {
-      key: 'injection',
-      url: 'assets/items/injection/injection.png',
-      normalMap: 'assets/items/injection/injection_n.png'
-    } );
     this.load.script( 'webfont',
       'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js' );
     this.load.image( {
@@ -51,6 +46,8 @@ export default class BootScene extends Phaser.Scene {
       url: 'assets/dungeon-tileset-ext.png',
       normalMap: 'assets/dungeon-tileset-ext_n.png'
     } );
+
+    this.loadItems();
 
     // TODO: DELETE THIS SAMPLE
     this.load.atlas( 'sample-sprites', 'assets/sample-sprites.png',
@@ -62,5 +59,21 @@ export default class BootScene extends Phaser.Scene {
       renderer: this.game.renderer,
       maxLights: 10
     } ) );
+  }
+
+  /**
+   * Loads the items
+   */
+  loadItems() {
+    this.load.image( {
+      key: 'injection',
+      url: 'assets/items/injection/injection.png',
+      normalMap: 'assets/items/injection/injection_n.png'
+    } );
+    this.load.image( {
+      key: 'timelapse',
+      url: 'assets/items/timelapse/timelapse.png',
+      normalMap: 'assets/items/timelapse/timelapse_n.png'
+    } );
   }
 }

@@ -24,7 +24,7 @@ const baseConfig = {
  * The minimum length of a hallway between two rooms
  * @type {number}
  */
-const MIN_HALL_LENGTH = 3;
+const MIN_HALL_LENGTH = 2;
 
 /**
  * The maximum length of a hallway between two rooms
