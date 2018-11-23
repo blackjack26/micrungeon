@@ -281,8 +281,6 @@ export default class Dungeon {
       .slice( 0, 5 )
       .forEach( ( room ) => {
         room.type = RoomType.ITEM;
-        room.tiles[ room.centerY - room.y ][ room.centerX - room.x ]
-          = Tiles.ITEM; // TODO: remove, for visualizations
       } );
   }
 

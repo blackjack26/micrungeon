@@ -87,5 +87,10 @@ export default class BootScene extends Phaser.Scene {
       url: 'assets/items/timelapse/timelapse.png',
       normalMap: 'assets/items/timelapse/timelapse_n.png'
     } );
+    this.load.image( {
+      key: 'vorpal_sword',
+      url: 'assets/items/vorpal_sword/vorpal_sword.png',
+      normalMap: 'assets/items/vorpal_sword/vorpal_sword_n.png'
+    } );
   }
 }

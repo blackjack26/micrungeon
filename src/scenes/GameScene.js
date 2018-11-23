@@ -163,6 +163,9 @@ export default class GameScene extends Phaser.Scene {
           );
         }
       }
+      else if ( !playerRoom.entered && playerRoom.type === RoomType.ITEM ) {
+        playerRoom.spawnItem( this );
+      }
     }
     playerRoom.entered = true;
   }

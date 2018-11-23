@@ -1,6 +1,7 @@
 import Tiles from './Tiles';
 import { RoomType, Edge } from '../globals';
 import { Enemy } from '../entity';
+import ItemDrop from '../entity/items/ItemDrop';
 
 const enemySpawnMap = {
   0: {
@@ -170,6 +171,18 @@ class Room {
       return Edge.RIGHT;
     }
     return Edge.NONE;
+  }
+
+  /**
+   * Spawns a random item
+   * @param {Phaser.Scene} scene The current scene
+   */
+  spawnItem( scene ) {
+    ItemDrop.drop(
+      scene.map.tileToWorldX( this.centerX + 0.5 ),
+      scene.map.tileToWorldY( this.centerY + 0.5 ),
+      scene
+    );
   }
 
   /**

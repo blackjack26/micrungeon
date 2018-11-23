@@ -62,7 +62,7 @@ class Entity extends Phaser.GameObjects.Sprite {
         color: '#1ace32',
         fontWeight: 'bold'
       } );
-    healTxt.setShadow( 0, 2, '#333', 10 );
+    healTxt.setShadow( 0, 2, '#000', 10 );
     healTxt.setScale( 1 / this.scene.cameras.main.zoom );
     this.scene.tweens.add( {
       targets: healTxt,
@@ -92,7 +92,7 @@ class Entity extends Phaser.GameObjects.Sprite {
         color: '#e00202',
         fontWeight: 'bold'
       } );
-    hurtTxt.setShadow( 0, 2, '#333', 10 );
+    hurtTxt.setShadow( 0, 2, '#000', 10 );
     hurtTxt.setScale( 1 / this.scene.cameras.main.zoom );
     this.scene.tweens.add( {
       targets: hurtTxt,
