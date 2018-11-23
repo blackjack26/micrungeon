@@ -10,10 +10,12 @@ export default class Battle {
   /**
    * Creates the battle room
    * @param {Room} room The room the battle is occurring in
+   * @param {number} edge The edge the player entered from
    * @param {Phaser.Scene} scene The current scene
    */
-  constructor( room, scene ) {
+  constructor( room, edge, scene ) {
     this.room = room;
+    this.startEdge = edge;
     this.scene = scene;
     this.currentEnemy = null;
   }
@@ -27,7 +29,7 @@ export default class Battle {
       this.enemyIndex = 0;
     }
     else if ( this.playerTurn ) {
-      if ( this.scene.keys.up.isDown || this.scene.keys.left.isDown ) {
+      if ( this.scene.keys.down.isDown || this.scene.keys.right.isDown ) {
         this.currentEnemy.deselect();
         this.enemyIndex--;
         if ( this.enemyIndex < 0 ) {
@@ -38,7 +40,7 @@ export default class Battle {
         this.currentEnemy.select();
         this.scene.input.keyboard.resetKeys();
       }
-      else if ( this.scene.keys.down.isDown || this.scene.keys.right.isDown ) {
+      else if ( this.scene.keys.up.isDown || this.scene.keys.left.isDown ) {
         this.currentEnemy.deselect();
         this.enemyIndex++;
         if ( this.enemyIndex >= this.scene.enemyGroup.countActive() ) {
@@ -64,7 +66,7 @@ export default class Battle {
     this.scene.input.keyboard.resetKeys();
     this.centerCameraToRoom();
     return this.lockRoom()
-      .then( () => this.room.spawnEnemies( this.scene ) )
+      .then( () => this.room.spawnEnemies( this.startEdge, this.scene ) )
       .then( () => {
         this.scene.enemyGroup.getChildren().forEach( ( enemy ) => {
           enemy.on( 'pointerdown', () => {
@@ -80,6 +82,7 @@ export default class Battle {
         } );
       } )
       .then( () => {
+        this.movePlayer();
         this.active = true;
         this.playerTurn = true;
         this.enemyIndex = 0;
@@ -99,6 +102,45 @@ export default class Battle {
       .then( () => {
         this.active = false;
       } );
+  }
+
+  /**
+   * Moves the player to face enemies
+   */
+  movePlayer() {
+    const callback = () => { this.scene.player.movementDisabled = true; };
+    if ( this.startEdge === Edge.TOP ) {
+      this.scene.player.setDestination(
+        this.scene.map.tileToWorldX( this.room.centerX + 0.5 ),
+        this.scene.map.tileToWorldY(
+          this.room.centerY + 0.5 - this.room.height / 4 ),
+        callback
+      );
+    }
+    else if ( this.startEdge === Edge.RIGHT ) {
+      this.scene.player.setDestination(
+        this.scene.map.tileToWorldX(
+          this.room.centerX + 0.5 + this.room.width / 4 ),
+        this.scene.map.tileToWorldY( this.room.centerY + 0.5 ),
+        callback
+      );
+    }
+    else if ( this.startEdge === Edge.BOTTOM ) {
+      this.scene.player.setDestination(
+        this.scene.map.tileToWorldX( this.room.centerX + 0.5 ),
+        this.scene.map.tileToWorldY(
+          this.room.centerY + 0.5 + this.room.height / 4 ),
+        callback
+      );
+    }
+    else if ( this.startEdge === Edge.LEFT ) {
+      this.scene.player.setDestination(
+        this.scene.map.tileToWorldX(
+          this.room.centerX + 0.5 - this.room.width / 4 ),
+        this.scene.map.tileToWorldY( this.room.centerY + 0.5 ),
+        callback
+      );
+    }
   }
 
   /**

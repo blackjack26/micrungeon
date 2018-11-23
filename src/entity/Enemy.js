@@ -23,6 +23,7 @@ export default class Enemy extends Entity {
     } );
     this.scene = config.scene;
     this.selected = false;
+    this.setInteractive( { useHandCursor: true } );
   }
 
   /**

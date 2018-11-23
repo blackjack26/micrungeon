@@ -9,15 +9,20 @@ export default class Player extends Entity {
   /**
    * @override
    */
-  constructor( config ) {
-    super( config );
-    this.scene = config.scene;
+  constructor( x, y, scene ) {
+    super( {
+      scene: scene,
+      key: 'player',
+      x: x,
+      y: y
+    } );
     this.inventory = new Inventory();
     this.speed = 200;
     this.movementDisabled = false;
-    this.anims.play( 'sample' );
+    // this.anims.play( 'sample' );
     this.setHealth( 10 );
     this.drawPlayerHUD();
+    this.setPipeline( 'LightPipeline' );
   }
 
   /**
@@ -30,7 +35,8 @@ export default class Player extends Entity {
     const healthTxt = this.scene.add.text(
       HUD_X + 10, 10, 'Health', {
         fontSize: '12px',
-        color: '#FFF'
+        color: '#FFF',
+        fontFamily: 'Rye'
       }
     );
 
@@ -112,14 +118,12 @@ export default class Player extends Entity {
    * Sets the destination for the player to move to
    * @param {number} x The x-coordinate
    * @param {number} y The y-coordinate
-   * @param {Room} room The room the player is in
    * @param {*} callback The callback when the movement is finished
    */
-  setDestination( x, y, room, callback ) {
+  setDestination( x, y, callback ) {
     this.dest = {
       x: x,
-      y: y,
-      room: room
+      y: y
     };
     this.movementDisabled = true;
     this.movementCallback = callback;

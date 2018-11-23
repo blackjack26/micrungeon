@@ -7,7 +7,6 @@ import TilemapVisibility from '../dungeon/TilemapVisibility';
 import { Player } from '../entity';
 import Battle from '../battle/Battle';
 import BattleDrop from '../battle/BattleDrop';
-import InventoryScene from './InventoryScene';
 import { ItemType } from '../entity/items';
 
 /**
@@ -26,7 +25,6 @@ export default class GameScene extends Phaser.Scene {
    * @override
    */
   preload() {
-    this.scene.add( 'InventoryScene', InventoryScene );
   }
 
   /**
@@ -47,11 +45,11 @@ export default class GameScene extends Phaser.Scene {
    * @override
    */
   update( time, delta ) {
+    this.player.update( time, delta );
     if ( this.battle && this.battle.active ) {
       this.battle.update();
     }
     else {
-      this.player.update( time, delta );
       this.updateMapVisibility();
     }
 
@@ -115,24 +113,21 @@ export default class GameScene extends Phaser.Scene {
           this.player.setDestination(
             this.player.x,
             this.player.y + this.map.tileHeight * 2,
-            playerRoom,
-            () => { this.beginCombat( playerRoom ); }
+            () => { this.beginCombat( playerRoom, Edge.TOP ); }
           );
         }
         else if ( Edge.BOTTOM === edge ) {
           this.player.setDestination(
             this.player.x,
             this.player.y - this.map.tileHeight * 2,
-            playerRoom,
-            () => { this.beginCombat( playerRoom ); }
+            () => { this.beginCombat( playerRoom, Edge.BOTTOM ); }
           );
         }
         else if ( Edge.LEFT === edge ) {
           this.player.setDestination(
             this.player.x + this.map.tileWidth * 2,
             this.player.y,
-            playerRoom,
-            () => { this.beginCombat( playerRoom ); }
+            () => { this.beginCombat( playerRoom, Edge.LEFT ); }
           );
         }
         // Right
@@ -140,8 +135,7 @@ export default class GameScene extends Phaser.Scene {
           this.player.setDestination(
             this.player.x - this.map.tileWidth * 2,
             this.player.y,
-            playerRoom,
-            () => { this.beginCombat( playerRoom ); }
+            () => { this.beginCombat( playerRoom, Edge.RIGHT ); }
           );
         }
       }
@@ -151,10 +145,11 @@ export default class GameScene extends Phaser.Scene {
 
   /**
    * Begins combat inside of a battle room
-   * @param  {Room} room The room to begin a battle in
+   * @param {Room} room The room to begin a battle in
+   * @param {number} edge The edge the player entered on
    */
-  beginCombat( room ) {
-    this.battle = new Battle( room, this );
+  beginCombat( room, edge ) {
+    this.battle = new Battle( room, edge, this );
     this.battle.begin();
   }
 
@@ -355,12 +350,7 @@ export default class GameScene extends Phaser.Scene {
   createPlayer() {
     const sX = this.map.tileToWorldX( this.dungeon.startRoom.centerX );
     const sY = this.map.tileToWorldY( this.dungeon.startRoom.centerY );
-    this.player = new Player( {
-      scene: this,
-      key: 'sample-sprites',
-      x: sX,
-      y: sY
-    } );
+    this.player = new Player( sX, sY, this );
     this.physics.add.existing( this.player );
 
     this.physics.add.collider( this.player, this.groundLayer );
