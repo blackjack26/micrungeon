@@ -33,7 +33,7 @@ export default class GameScene extends Phaser.Scene {
   create() {
     this.inCombat = false;
     this.keys = KeyBinding.createKeys( this,
-      [ 'up', 'left', 'right', 'down', 'space', 'interact' ] );
+      [ 'up', 'left', 'right', 'down', 'space', 'interact', 'pause' ] );
     this.createDungeonMap();
     this.createPlayer();
     this.formatCamera();
@@ -56,6 +56,30 @@ export default class GameScene extends Phaser.Scene {
     if ( this.keys.interact.isDown ) {
       this.openInventory();
     }
+
+    if ( this.keys.pause.isDown ) {
+      this.pause();
+    }
+  }
+
+  /**
+   * Pauses the game
+   */
+  pause() {
+    this.input.keyboard.resetKeys();
+    this.scene
+      .launch( 'PauseScene', {parent: this} )
+      .bringToTop( 'PauseScene' )
+      .pause();
+  }
+
+  /**
+   * Unpauses the game
+   */
+  unpause() {
+    this.scene.stop( 'PauseScene' );
+    this.input.keyboard.resetKeys();
+    this.scene.resume();
   }
 
   /**
