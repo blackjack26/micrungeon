@@ -4,7 +4,8 @@ const BINDINGS = {
   UP: Phaser.Input.Keyboard.KeyCodes.W,
   DOWN: Phaser.Input.Keyboard.KeyCodes.S,
   INTERACT: Phaser.Input.Keyboard.KeyCodes.E,
-  SPACE: Phaser.Input.Keyboard.KeyCodes.SPACE
+  SPACE: Phaser.Input.Keyboard.KeyCodes.SPACE,
+  PAUSE: Phaser.Input.Keyboard.KeyCodes.ESC
 };
 
 /**

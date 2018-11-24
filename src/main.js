@@ -2,6 +2,8 @@ import 'phaser';
 import BootScene from './scenes/BootScene';
 import TitleScene from './scenes/TitleScene';
 import GameScene from './scenes/GameScene';
+import InventoryScene from './scenes/InventoryScene';
+import PauseScene from './scenes/PauseScene';
 
 const config = {
   type: Phaser.WEBGL,
@@ -11,7 +13,9 @@ const config = {
   scene: [
     BootScene,
     TitleScene,
-    GameScene
+    GameScene,
+    InventoryScene,
+    PauseScene
   ],
   physics: {
     default: 'arcade',

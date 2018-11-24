@@ -11,6 +11,7 @@ class Entity extends Phaser.GameObjects.Sprite {
   constructor( config ) {
     const { scene, x, y, key } = config;
     super( scene, x, y, key );
+    this.scene = scene;
     scene.add.existing( this );
 
     /**
@@ -52,6 +53,25 @@ class Entity extends Phaser.GameObjects.Sprite {
 
     // take either the max health, or the added amount
     this.health = Math.min( this.health + amount, this.maxHealth );
+
+    // Text Display
+    const healTxt = this.scene.add.text( this.x - this.width / 2,
+      this.y - this.height, `+${amount}`, {
+        fontSize: '16px',
+        fontFamily: 'Rye',
+        color: '#1ace32',
+        fontWeight: 'bold'
+      } );
+    healTxt.setShadow( 0, 2, '#000', 10 );
+    healTxt.setScale( 1 / this.scene.cameras.main.zoom );
+    this.scene.tweens.add( {
+      targets: healTxt,
+      duration: 1000,
+      alpha: 0,
+      y: this.y - this.height - 20,
+      ease: 'Linear'
+    } );
+    setTimeout( () => healTxt.destroy(), 1000 );
   }
 
   /**
@@ -62,6 +82,26 @@ class Entity extends Phaser.GameObjects.Sprite {
     if ( !this.canHarm() || isNaN( amount ) ) {
       return;
     }
+
+    // Text Display
+    const hurtTxt = this.scene.add.text( this.x - this.width / 2,
+      this.y - this.height,
+      `-${amount}`, {
+        fontSize: '16px',
+        fontFamily: 'Rye',
+        color: '#e00202',
+        fontWeight: 'bold'
+      } );
+    hurtTxt.setShadow( 0, 2, '#000', 10 );
+    hurtTxt.setScale( 1 / this.scene.cameras.main.zoom );
+    this.scene.tweens.add( {
+      targets: hurtTxt,
+      duration: 1000,
+      alpha: 0,
+      y: this.y - this.height - 20,
+      ease: 'Linear'
+    } );
+    setTimeout( () => hurtTxt.destroy(), 1000 );
 
     // take either the min health (0), or the subtracted amount
     this.health = Math.max( this.health - amount, 0 );

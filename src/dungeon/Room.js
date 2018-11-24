@@ -1,7 +1,30 @@
 import Tiles from './Tiles';
 import { RoomType, Edge } from '../globals';
-import Random from '../util/Random';
 import { Enemy } from '../entity';
+import ItemDrop from '../entity/items/ItemDrop';
+
+const enemySpawnMap = {
+  0: {
+    2: { start: Math.PI / 4, inc: Math.PI / 2 },
+    3: { start: Math.PI / 4, inc: Math.PI / 4 },
+    4: { start: Math.PI / 8, inc: Math.PI / 4 }
+  },
+  1: {
+    2: { start: 3 * Math.PI / 4, inc: Math.PI / 2 },
+    3: { start: 3 * Math.PI / 4, inc: Math.PI / 4 },
+    4: { start: 5 * Math.PI / 8, inc: Math.PI / 4 }
+  },
+  2: {
+    2: { start: -Math.PI / 4, inc: -Math.PI / 2 },
+    3: { start: -Math.PI / 4, inc: -Math.PI / 4 },
+    4: { start: -Math.PI / 8, inc: -Math.PI / 4 }
+  },
+  3: {
+    2: { start: Math.PI / 4, inc: -Math.PI / 2 },
+    3: { start: Math.PI / 4, inc: -Math.PI / 4 },
+    4: { start: 3 * Math.PI / 8, inc: -Math.PI / 4 }
+  }
+};
 
 /**
  * Each room in a dungeon has walls, floor, and doors. Also entities live
@@ -151,21 +174,48 @@ class Room {
   }
 
   /**
-   * [spawnEnemies description]
-   * @param  {[type]} scene [description]
+   * Spawns a random item
+   * @param {Phaser.Scene} scene The current scene
    */
-  spawnEnemies( scene ) {
+  spawnItem( scene ) {
+    ItemDrop.drop(
+      scene.map.tileToWorldX( this.centerX + 0.5 ),
+      scene.map.tileToWorldY( this.centerY + 0.5 ),
+      scene
+    );
+  }
+
+  /**
+   * Spawns the enemies into the room
+   * @param {number} edge The starting edge of the player
+   * @param {Phaser.Scene} scene The current scene
+   */
+  spawnEnemies( edge, scene ) {
     if ( this.type !== RoomType.BATTLE ) {
       return;
     }
 
-    const rand = new Random();
-    for ( let i = 0; i < rand.randInt( 1, 3 ); i++ ) {
+    let numEnemies = 1;
+    const size = ( this.width + this.height ) / 2;
+    if ( size < 10 ) {
+      numEnemies = 2;
+    }
+    else if ( size >= 10 && size < 13 ) {
+      numEnemies = 3;
+    }
+    else {
+      numEnemies = 4;
+    }
+
+    const mapping = enemySpawnMap[ edge ][ numEnemies ];
+    for ( let i = 0; i < numEnemies; i++ ) {
+      const t = mapping.start + i * mapping.inc;
+
       const x = scene.map.tileToWorldX(
-        rand.randInt( this.x + 2, this.x + this.width - 2 )
+        this.centerX + 0.5 + this.width / 4 * Math.cos( t )
       );
       const y = scene.map.tileToWorldY(
-        rand.randInt( this.y + 2, this.y + this.height - 2 )
+        this.centerY + 0.5 + this.height / 4 * Math.sin( t )
       );
       const enemy = new Enemy( {
         scene: scene,
@@ -175,7 +225,6 @@ class Room {
       } );
       enemy.miniGames.push( 'DanceDance' ); // TODO: Change based on enemy type
       enemy.setHealth( 3 ); // TODO: Change based on enemy type
-      enemy.setInteractive( { useHandCursor: true } );
       scene.enemyGroup.add( enemy );
     }
   }

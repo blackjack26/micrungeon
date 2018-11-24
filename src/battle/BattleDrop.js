@@ -14,8 +14,6 @@ export default class BattleDrop {
     const r = new Random( new Date().getTime() );
     const num = r.randInt( 0, 100 );
 
-    console.log( num );
-
     // 40% injection
     if ( num < 40 ) {
       new Injection( x, y, scene );

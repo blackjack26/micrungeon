@@ -38,7 +38,6 @@ export default class BootScene extends Phaser.Scene {
     } );
 
     // Load all assets here
-    this.load.image( 'enemy', 'assets/enemy.png' );
     this.load.script( 'webfont',
       'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js' );
     this.load.image( {
@@ -48,6 +47,7 @@ export default class BootScene extends Phaser.Scene {
     } );
 
     this.loadItems();
+    this.loadSprites();
 
     // TODO: DELETE THIS SAMPLE
     this.load.atlas( 'sample-sprites', 'assets/sample-sprites.png',
@@ -59,6 +59,18 @@ export default class BootScene extends Phaser.Scene {
       renderer: this.game.renderer,
       maxLights: 10
     } ) );
+  }
+
+  /**
+   * Loads the sprites
+   */
+  loadSprites() {
+    this.load.image( 'enemy', 'assets/enemy.png' );
+    this.load.image( {
+      key: 'player',
+      url: 'assets/player/player.png',
+      normalMap: 'assets/player/player_n.png'
+    } );
   }
 
   /**
@@ -74,6 +86,11 @@ export default class BootScene extends Phaser.Scene {
       key: 'timelapse',
       url: 'assets/items/timelapse/timelapse.png',
       normalMap: 'assets/items/timelapse/timelapse_n.png'
+    } );
+    this.load.image( {
+      key: 'vorpal_sword',
+      url: 'assets/items/vorpal_sword/vorpal_sword.png',
+      normalMap: 'assets/items/vorpal_sword/vorpal_sword_n.png'
     } );
   }
 }
