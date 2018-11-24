@@ -1,6 +1,7 @@
 import { Entity } from './';
 import HealthBar from '../battle/HealthBar';
 import { Inventory } from './items';
+import Random from '../util/Random';
 
 /**
  * Base class for all player interactions
@@ -19,6 +20,7 @@ export default class Player extends Entity {
     this.inventory = new Inventory();
     this.speed = 200;
     this.movementDisabled = false;
+    this.criticalChance = 0;
     // this.anims.play( 'sample' );
     this.setHealth( 10 );
     this.drawPlayerHUD();
@@ -39,6 +41,7 @@ export default class Player extends Entity {
         fontFamily: 'Rye'
       }
     );
+    healthTxt.setShadow( 0, 2, '#000', 10 );
 
     this.healthBar = new HealthBar( this.scene, {
       x: healthTxt.x + healthTxt.width + 10,
@@ -105,6 +108,22 @@ export default class Player extends Entity {
   heal( amount ) {
     super.heal( amount );
     this.healthBar.setPercent( this.health / this.maxHealth );
+  }
+
+  /**
+   * Attacks the given enemy with the given damage
+   * @param {Enemy} enemy The enemy to attack
+   * @param {number} damage The amount to injure the enemy
+   */
+  attack( enemy, damage ) {
+    // Critical Hit
+    if ( this.criticalChance !== 0 ) {
+      const r = new Random();
+      if ( r.randInt( 0, 100 ) < this.criticalChance ) {
+        damage = enemy.health;
+      }
+    }
+    enemy.injure( damage );
   }
 
   /**

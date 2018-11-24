@@ -27,7 +27,7 @@ export default class InventoryScene extends Phaser.Scene {
     this.h = this.sys.game.config.height;
 
     WebFont.load( {
-      google: {families: [ 'Rye' ]},
+      google: { families: [ 'Rye' ] },
       active: () => {
         const titleText = this.add.text( this.w / 2, 10, 'Inventory', {
           fontSize: '40px',
@@ -54,6 +54,7 @@ export default class InventoryScene extends Phaser.Scene {
     this.lights.enable().setAmbientColor( 0x111111 );
     this.lights.addLight( this.w / 2, this.h / 2, this.w * 2, 0xFFFFFF, 1 );
 
+    // Normal Items
     this.inventory.items.forEach( ( item, index ) => {
       const Item = itemClass( item );
       const i = new Item( this.x + 40 + index * 64, this.y + 100, this );
@@ -61,13 +62,22 @@ export default class InventoryScene extends Phaser.Scene {
       i.setScale( 2 );
 
       if ( i.itemType !== this.context ) {
-        i.setTint( 0x000000 );
+        i.setAlpha( 0.25 );
       }
       else {
         i.on( 'pointerdown', () => {
           this.parent.closeInventory( i );
         } );
       }
+    } );
+
+    // Passive Items
+    this.inventory.passive.forEach( ( item, index ) => {
+      const Item = itemClass( item );
+      const i = new Item( this.x + 40 + index * 64, this.y + 400,
+        this );
+      i.inventoryIndex = index;
+      i.setScale( 2 );
     } );
   }
 

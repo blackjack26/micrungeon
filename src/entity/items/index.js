@@ -2,8 +2,9 @@ import Injection from './Injection';
 import Timelapse from './Timelapse';
 import Inventory from './Inventory';
 import VorpalSword from './VorpalSword';
+import BugSpray from './BugSpray';
 
-const items = { Injection, Timelapse, VorpalSword };
+const items = { Injection, Timelapse, VorpalSword, BugSpray };
 
 const ItemType = {
   ANY: 0,
@@ -27,5 +28,6 @@ export {
   Inventory,
   Timelapse,
   VorpalSword,
+  BugSpray,
   itemClass
 };

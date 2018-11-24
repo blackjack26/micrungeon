@@ -1,5 +1,5 @@
 import Random from '../util/Random';
-import { Injection, Timelapse } from '../entity/items';
+import { Injection, Timelapse, BugSpray } from '../entity/items';
 
 /**
  * Contains methods for dropping items during / after battle
@@ -21,6 +21,10 @@ export default class BattleDrop {
     // 10% timelapse
     else if ( num >= 40 && num < 50 ) {
       new Timelapse( x, y, scene );
+    }
+    // 15% bug spray
+    else if ( num >= 50 && num < 65 ) {
+      new BugSpray( x, y, scene );
     }
   }
 }

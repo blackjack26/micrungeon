@@ -77,20 +77,21 @@ export default class BootScene extends Phaser.Scene {
    * Loads the items
    */
   loadItems() {
+    this.loadItem( 'injection' );
+    this.loadItem( 'timelapse' );
+    this.loadItem( 'vorpal_sword' );
+    this.loadItem( 'bug_spray' );
+  }
+
+  /**
+   * Loads the image for an item based on its name
+   * @param {string} name The name of the item
+   */
+  loadItem( name ) {
     this.load.image( {
-      key: 'injection',
-      url: 'assets/items/injection/injection.png',
-      normalMap: 'assets/items/injection/injection_n.png'
-    } );
-    this.load.image( {
-      key: 'timelapse',
-      url: 'assets/items/timelapse/timelapse.png',
-      normalMap: 'assets/items/timelapse/timelapse_n.png'
-    } );
-    this.load.image( {
-      key: 'vorpal_sword',
-      url: 'assets/items/vorpal_sword/vorpal_sword.png',
-      normalMap: 'assets/items/vorpal_sword/vorpal_sword_n.png'
+      key: name,
+      url: `assets/items/${name}/${name}.png`,
+      normalMap: `assets/items/${name}/${name}_n.png`
     } );
   }
 }
