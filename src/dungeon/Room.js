@@ -1,53 +1,131 @@
 import Tiles from './Tiles';
-import { RoomType, Edge } from '../globals';
+import { Edge, RoomType } from '../globals';
 import { Enemy } from '../entity';
 import ItemDrop from '../entity/items/ItemDrop';
 
+/**
+ * Describes how enemies will spawn based on the entry direction of the player
+ * @type {Map.<Direction,Map.<number, object>>}
+ */
 const enemySpawnMap = {
   0: {
-    2: { start: Math.PI / 4, inc: Math.PI / 2 },
-    3: { start: Math.PI / 4, inc: Math.PI / 4 },
-    4: { start: Math.PI / 8, inc: Math.PI / 4 }
+    2: {
+      start: Math.PI / 4,
+      inc: Math.PI / 2
+    },
+    3: {
+      start: Math.PI / 4,
+      inc: Math.PI / 4
+    },
+    4: {
+      start: Math.PI / 8,
+      inc: Math.PI / 4
+    }
   },
   1: {
-    2: { start: 3 * Math.PI / 4, inc: Math.PI / 2 },
-    3: { start: 3 * Math.PI / 4, inc: Math.PI / 4 },
-    4: { start: 5 * Math.PI / 8, inc: Math.PI / 4 }
+    2: {
+      start: 3 * Math.PI / 4,
+      inc: Math.PI / 2
+    },
+    3: {
+      start: 3 * Math.PI / 4,
+      inc: Math.PI / 4
+    },
+    4: {
+      start: 5 * Math.PI / 8,
+      inc: Math.PI / 4
+    }
   },
   2: {
-    2: { start: -Math.PI / 4, inc: -Math.PI / 2 },
-    3: { start: -Math.PI / 4, inc: -Math.PI / 4 },
-    4: { start: -Math.PI / 8, inc: -Math.PI / 4 }
+    2: {
+      start: -Math.PI / 4,
+      inc: -Math.PI / 2
+    },
+    3: {
+      start: -Math.PI / 4,
+      inc: -Math.PI / 4
+    },
+    4: {
+      start: -Math.PI / 8,
+      inc: -Math.PI / 4
+    }
   },
   3: {
-    2: { start: Math.PI / 4, inc: -Math.PI / 2 },
-    3: { start: Math.PI / 4, inc: -Math.PI / 4 },
-    4: { start: 3 * Math.PI / 8, inc: -Math.PI / 4 }
+    2: {
+      start: Math.PI / 4,
+      inc: -Math.PI / 2
+    },
+    3: {
+      start: Math.PI / 4,
+      inc: -Math.PI / 4
+    },
+    4: {
+      start: 3 * Math.PI / 8,
+      inc: -Math.PI / 4
+    }
   }
 };
 
 /**
- * Each room in a dungeon has walls, floor, and doors. Also entities live
- * within these rooms. The entities defined for each room will be random
- * and depend on the level.
+ * Each room in a dungeon has walls, floor, and doors. Also entities live within
+ * these rooms. The entities defined for each room will be random and depend on
+ * the level.
  */
 class Room {
   /**
+   * @constructor
    * @param {number} width The width of the room
    * @param {number} height The height of the room
    */
   constructor( width, height ) {
+    /**
+     * The width of the room in tiles
+     * @type {number}
+     */
     this.width = width;
+    
+    /**
+     * The height of the room in tiles
+     * @type {number}
+     */
     this.height = height;
+    
+    /**
+     * The area of the room in tiles-squared
+     * @type {number}
+     */
     this.area = width * height;
 
     this.setPosition( 0, 0 );
 
+    /**
+     * The ID number of the room
+     * @type {number}
+     */
     this.id = -1;
+    
+    /**
+     * The room type
+     * @type {RoomType}
+     */
     this.type = RoomType.BATTLE;
+    
+    /**
+     * Whether or not the player has entered this room
+     * @type {boolean}
+     */
     this.entered = false;
 
+    /**
+     * The doors in the room
+     * @type {Array.<Door>}
+     */
     this.doors = [];
+    
+    /**
+     * The tiles in the room
+     * @type {Array.<Tiles>}
+     */
     this.tiles = [];
 
     // Surround the room with walls, and fill the rest with floors.
@@ -73,13 +151,52 @@ class Room {
    * @param {number} y The y position of the room
    */
   setPosition( x, y ) {
+    /**
+     * The horizontal position in tiles
+     * @type {number}
+     */
     this.x = x;
+    
+    /**
+     * The vertical position in tiles
+     * @type {number}
+     */
     this.y = y;
+    
+    /**
+     * The position of the left edge of the room
+     * @type {number}
+     */
     this.left = x;
+
+    /**
+     * The position of the right edge of the room
+     * @type {number}
+     */
     this.right = x + this.width - 1;
+    
+    /**
+     * The position of the top edge of the room
+     * @type {number}
+     */
     this.top = y;
+    
+    /**
+     * The position of the bottom edge of the room
+     * @type {number}
+     */
     this.bottom = y + this.height - 1;
+    
+    /**
+     * The horizontal center position in tiles
+     * @type {number}
+     */
     this.centerX = x + Math.floor( this.width / 2 );
+    
+    /**
+     * The vertical center position in tiles
+     * @type {number}
+     */
     this.centerY = y + Math.floor( this.height / 2 );
   }
 
@@ -104,7 +221,11 @@ class Room {
           else if ( x === this.width - 1 ) {
             edge = Edge.RIGHT;
           }
-          this.doors.push( { x: x, y: y, edge: edge } );
+          this.doors.push( {
+            x: x,
+            y: y,
+            edge: edge
+          } );
         }
       }
     }
@@ -139,7 +260,7 @@ class Room {
 
   /**
    * Checks to see if a door is in the corner of a room
-   * @param {object} door The door to a room
+   * @param {Door} door The door to a room
    * @return {boolean} True if the door is on the corner of the room
    */
   isCorner( door ) {
@@ -155,7 +276,7 @@ class Room {
    * Determines if the given coordinates is on the edge of the room
    * @param {number} x The x-coordinate (in tile space)
    * @param {number} y The y-coordinate (in tile space)
-   * @return {number} The Edge the coordinate lies on
+   * @return {Edge} The Edge the coordinate lies on
    */
   getEdge( x, y ) {
     if ( y === this.y ) {
@@ -187,7 +308,7 @@ class Room {
 
   /**
    * Spawns the enemies into the room
-   * @param {number} edge The starting edge of the player
+   * @param {Edge} edge The starting edge of the player
    * @param {Phaser.Scene} scene The current scene
    */
   spawnEnemies( edge, scene ) {

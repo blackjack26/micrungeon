@@ -1,5 +1,5 @@
 import Random from '../util/Random';
-import { Injection, Timelapse, BugSpray } from '../entity/items';
+import { BugSpray, Injection, Timelapse } from '../entity/items';
 
 /**
  * Contains methods for dropping items during / after battle

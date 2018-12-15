@@ -1,24 +1,24 @@
-const webpack = require('webpack');
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const webpack = require( 'webpack' );
+const path = require( 'path' );
+const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
+const BrowserSyncPlugin = require( 'browser-sync-webpack-plugin' );
 
-const definePlugin = new webpack.DefinePlugin({
-  '__DEV__': JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
-  'WEBGL_RENDERER': JSON.stringify(true),
-  'CANVAS_RENDERER': JSON.stringify(true)
-});
+const definePlugin = new webpack.DefinePlugin( {
+  '__DEV__': JSON.stringify( JSON.parse( process.env.BUILD_DEV || 'true' ) ),
+  'WEBGL_RENDERER': JSON.stringify( true ),
+  'CANVAS_RENDERER': JSON.stringify( true )
+} );
 
 module.exports = {
   entry: {
     app: [
-      path.resolve(__dirname, 'src/main.js')
+      path.resolve( __dirname, 'src/main.js' )
     ],
-    vendor: ['phaser']
+    vendor: [ 'phaser' ]
   },
   output: {
     pathinfo: true,
-    path: path.resolve(__dirname, 'dev'),
+    path: path.resolve( __dirname, 'build', 'dev' ),
     publicPath: './dev/',
     library: '[name]',
     libraryTarget: 'umd',
@@ -27,10 +27,10 @@ module.exports = {
   watch: true,
   plugins: [
     definePlugin,
-    new HtmlWebpackPlugin({
+    new HtmlWebpackPlugin( {
       filename: '../index.html',
       template: './src/index.html',
-      chunks: ['vendor', 'app'],
+      chunks: [ 'vendor', 'app' ],
       chunksSortMode: 'manual',
       minify: {
         removeAttributeQuotes: false,
@@ -43,19 +43,26 @@ module.exports = {
         removeEmptyAttributes: false
       },
       hash: false
-    }),
-    new BrowserSyncPlugin({
+    } ),
+    new BrowserSyncPlugin( {
       host: process.env.IP || 'localhost',
       port: process.env.PORT || 3000,
       server: {
-        baseDir: ['./', './dev']
+        baseDir: [ './', './build' ]
       }
-    })
+    } )
   ],
   module: {
     rules: [
-      { test: /\.js$/, use: ['babel-loader'], include: path.join(__dirname, 'src') },
-      { test: [/\.vert$/, /\.frag$/], use: 'raw-loader' }
+      {
+        test: /\.js$/,
+        use: [ 'babel-loader' ],
+        include: path.join( __dirname, 'src' )
+      },
+      {
+        test: [ /\.vert$/, /\.frag$/ ],
+        use: 'raw-loader'
+      }
     ]
   }
 };

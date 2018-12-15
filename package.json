@@ -1,12 +1,50 @@
 {
-  "name": "Micrungeon",
+  "name": "micrungeon",
   "version": "0.1.0",
   "description": "Phaser 3 hybrid game",
-  "main": "src/index.js",
+  "main": "index.js",
+  "build": {
+    "appId": "com.chaosalpha.micrungeon",
+    "productName": "Micrungeon",
+    "copyright": "Copyright (c) 2018 Chaos Alpha",
+    "directories": {
+      "output": "build/dist"
+    }
+  },
+  "esdoc": {
+    "source": "./src",
+    "destination": "./docs",
+    "plugins": [
+      {
+        "name": "esdoc-standard-plugin"
+      },
+      {
+        "name": "esdoc-importpath-plugin",
+        "option": {
+          "stripPackageName": true,
+          "replaces": [
+            {
+              "from": ".js",
+              "to": ""
+            },
+            {
+              "from": "/index",
+              "to": ""
+            }
+          ]
+        }
+      }
+    ]
+  },
   "scripts": {
-    "dev": "webpack --mode=development",
-    "deploy": "webpack --mode=production --config webpack.production.config.js",
-    "test": "eslint ./src/**/**.js"
+    "start": "webpack --mode=development",
+    "postinstall": "electron-builder install-app-deps",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "deploy": "webpack --mode=production --config webpack.production.config.js && npm run dist",
+    "deploy-pack": "webpack --mode=production --config webpack.production.config.js && npm run pack",
+    "test": "eslint ./src/**/**.js",
+    "doc": "esdoc"
   },
   "repository": {
     "type": "git",
@@ -23,7 +61,8 @@
   "homepage": "https://github.com/blackjack26/micrungeon#readme",
   "dependencies": {
     "phaser": "^3.15.1",
-    "seedrandom": "^2.4.4"
+    "seedrandom": "^2.4.4",
+    "webfontloader": "^1.6.28"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
@@ -34,6 +73,11 @@
     "browser-sync-webpack-plugin": "^2.2.2",
     "clean-webpack-plugin": "^0.1.19",
     "copy-webpack-plugin": "^4.6.0",
+    "electron": "^3.0.12",
+    "electron-builder": "^20.38.3",
+    "esdoc": "^1.1.0",
+    "esdoc-importpath-plugin": "^1.0.2",
+    "esdoc-standard-plugin": "^1.0.0",
     "eslint": "^5.8.0",
     "eslint-config-google": "^0.11.0",
     "eslint-plugin-import": "^2.14.0",

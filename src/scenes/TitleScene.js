@@ -1,4 +1,5 @@
 import KeyBinding from '../util/KeyBinding';
+import WebFont from 'webfontloader';
 
 /**
  * The title scene displays the main menu for the player to choose what they
@@ -7,19 +8,41 @@ import KeyBinding from '../util/KeyBinding';
 export default class TitleScene extends Phaser.Scene {
   /**
    * Initializes the title scene
+   * @constructor
    */
   constructor() {
     super( { key: 'TitleScene' } );
+    
+    /**
+     * The title of the game
+     * @type {string}
+     */
     this.gameTitle = 'Micrungeon';
+    
+    /**
+     * The current version of the game
+     * @type {string}
+     */
     this.version = '0.1.0';
+    
+    /**
+     * The menu index of the option currently selected
+     * @type {number}
+     */
     this.index = 0;
+    
+    /**
+     * A collection of menu options displayed to the user
+     * @type {Array.<Phaser.GameObjects.Text>}
+     */
+    this.options = [];
   }
 
   /**
    * @override
    */
   preload() {
-    
+
   }
 
   /**
@@ -27,6 +50,11 @@ export default class TitleScene extends Phaser.Scene {
    */
   create() {
     this.scene.setVisible( false );
+    
+    /**
+     * A collection of keys available for use in the inventory
+     * @type {Object}
+     */
     this.keys = KeyBinding.createKeys( this, [ 'up', 'down', 'space' ] );
     const { width, height } = this.game.config;
 
@@ -37,12 +65,15 @@ export default class TitleScene extends Phaser.Scene {
 
     // Version Text
     const versionText = this.add.text( 10, height - 22,
-      `v${this.version}`, { fontSize: '12px', color: '#FFF' } );
+      `v${this.version}`, {
+        fontSize: '12px',
+        color: '#FFF'
+      } );
     versionText.setPosition( width - versionText.width - 10, height - 22 );
 
     // Title Text
     WebFont.load( {
-      google: {families: [ 'Rye' ]},
+      google: { families: [ 'Rye' ] },
       active: () => {
         const titleText = this.add.text( 10, 10, this.gameTitle, {
           fontSize: '64px',
@@ -56,9 +87,18 @@ export default class TitleScene extends Phaser.Scene {
 
     // Menu Options
     this.options = [
-      this.add.text( 20, 0, 'Play', { fontSize: '30px', color: '#FFF' } ),
-      this.add.text( 20, 0, 'Options', { fontSize: '30px', color: '#FFF' } ),
-      this.add.text( 20, 0, 'Credits', { fontSize: '30px', color: '#FFF' } )
+      this.add.text( 20, 0, 'Play', {
+        fontSize: '30px',
+        color: '#FFF'
+      } ),
+      this.add.text( 20, 0, 'Options', {
+        fontSize: '30px',
+        color: '#FFF'
+      } ),
+      this.add.text( 20, 0, 'Credits', {
+        fontSize: '30px',
+        color: '#FFF'
+      } )
     ];
 
     for ( let i = 0; i < this.options.length; i++ ) {
@@ -66,8 +106,12 @@ export default class TitleScene extends Phaser.Scene {
       opt.setShadow( 0, 2, '#000', 5 );
       opt.setInteractive( { useHandCursor: true } );
       opt.setPosition( 20, 120 + ( opt.height + 20 ) * i );
-      opt.on( 'pointerover', () => { this.index = i; } );
-      opt.on( 'pointerdown', () => { this.selectOption(); } );
+      opt.on( 'pointerover', () => {
+        this.index = i;
+      } );
+      opt.on( 'pointerdown', () => {
+        this.selectOption();
+      } );
     }
   }
 

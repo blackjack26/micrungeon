@@ -1,4 +1,8 @@
-const TILES = {
+/**
+ * Collection of tiles based on their index in the tileset sprite sheet
+ * @type {Object}
+ */
+const Tileset = {
   BLANK: 19,
   WALL: {
     TOP_LEFT: 3,
@@ -45,4 +49,4 @@ const TILES = {
   }
 };
 
-export default TILES;
+export default Tileset;

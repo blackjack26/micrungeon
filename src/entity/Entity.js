@@ -1,18 +1,27 @@
+/**
+ * Constant used to denote invincibility
+ * @type {number}
+ */
 const INVINCIBLE = -1;
 
 /**
- * Generic entity class for anything that can be interacted with
- * in the game.
+ * Generic entity class for anything that can be interacted with in the game.
  */
-class Entity extends Phaser.GameObjects.Sprite {
+export default class Entity extends Phaser.GameObjects.Sprite {
   /**
-   * @param {object} config The configuration object for the entity
+   * @constructor
+   * @param {SpriteConfig} config The configuration object for the entity
    */
   constructor( config ) {
     const { scene, x, y, key } = config;
     super( scene, x, y, key );
-    this.scene = scene;
     scene.add.existing( this );
+    
+    /**
+     * The current scene
+     * @type {Phaser.Scene}
+     */
+    this.scene = scene;
 
     /**
      * The maximum amount the health of the entity can be set to.
@@ -44,7 +53,7 @@ class Entity extends Phaser.GameObjects.Sprite {
 
   /**
    * Heals the current entity by the given amount
-   * @param  {number} amount The amount the heal the entity by
+   * @param {number} amount The amount the heal the entity by
    */
   heal( amount ) {
     if ( !this.canHarm() || isNaN( amount ) ) {
@@ -76,7 +85,7 @@ class Entity extends Phaser.GameObjects.Sprite {
 
   /**
    * Injures the current entity by the given amount
-   * @param  {number} amount The amount to injure the entity by
+   * @param {number} amount The amount to injure the entity by
    */
   injure( amount ) {
     if ( !this.canHarm() || isNaN( amount ) ) {
@@ -133,8 +142,3 @@ class Entity extends Phaser.GameObjects.Sprite {
     this.destroy();
   }
 }
-
-module.exports = {
-  Entity: Entity,
-  INVINCIBLE: INVINCIBLE
-};

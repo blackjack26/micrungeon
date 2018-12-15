@@ -5,6 +5,10 @@ import GameScene from './scenes/GameScene';
 import InventoryScene from './scenes/InventoryScene';
 import PauseScene from './scenes/PauseScene';
 
+/**
+ * The configuration object for the Phaser Game instance
+ * @type {GameConfig}
+ */
 const config = {
   type: Phaser.WEBGL,
   parent: 'content',
@@ -19,10 +23,8 @@ const config = {
   ],
   physics: {
     default: 'arcade',
-    arcade: {gravity: { y: 0 }}
+    arcade: { gravity: { y: 0 } }
   }
 };
 
-
-// eslint-disable-next-line no-unused-vars
-const game = new Phaser.Game( config );
+new Phaser.Game( config );

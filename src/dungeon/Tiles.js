@@ -1,3 +1,6 @@
+/**
+ * Enum type to help dungeon room generation
+ */
 const Tiles = {
   EMPTY: 0,
   WALL: 1,
