@@ -79,8 +79,12 @@ export default class Enemy extends Entity {
     // Wait for health bar to finish
     setTimeout( () => {
       BattleDrop.drop( this.x, this.y, this.scene );
-      this.healthBar.destroy();
-      this.outline.destroy();
+      if ( this.healthBar ) {
+        this.healthBar.destroy();
+      }
+      if ( this.outline ) {
+        this.outline.destroy();
+      }
       this.scene.enemyGroup.remove( this );
       super.slay();
     }, this.healthBar.config.animationDuration );

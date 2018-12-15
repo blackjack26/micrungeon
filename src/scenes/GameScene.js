@@ -31,7 +31,7 @@ export default class GameScene extends Phaser.Scene {
    * @override
    */
   create() {
-    this.inCombat = false;
+    this.roomCooloffs = {};
     this.keys = KeyBinding.createKeys( this,
       [ 'up', 'left', 'right', 'down', 'space', 'interact', 'pause' ] );
     this.createDungeonMap();
@@ -107,7 +107,7 @@ export default class GameScene extends Phaser.Scene {
     this.scene.resume();
 
     if ( item && item.itemType === ItemType.ANY ) {
-      item.use( { player: this.player } );
+      item.use( { player: this.player, scene: this, battle: this.battle } );
       this.player.inventory.items.splice( item.inventoryIndex, 1 );
     }
   }
@@ -131,42 +131,62 @@ export default class GameScene extends Phaser.Scene {
     const playerRoom = this.dungeon.getRoomAt( playerTileX, playerTileY );
 
     if ( this.tilemapVisibility.setActiveRoom( playerRoom ) ) {
-      if ( !playerRoom.entered && playerRoom.type === RoomType.BATTLE ) {
-        const edge = playerRoom.getEdge( playerTileX, playerTileY );
-        if ( Edge.TOP === edge ) {
-          this.player.setDestination(
-            this.player.x,
-            this.player.y + this.map.tileHeight * 2,
-            () => { this.beginCombat( playerRoom, Edge.TOP ); }
-          );
+      if ( !playerRoom.entered ) {
+        // Battle Room
+        if ( playerRoom.type === RoomType.BATTLE && !this.preventSpawn ) {
+          const edge = playerRoom.getEdge( playerTileX, playerTileY );
+          if ( Edge.TOP === edge ) {
+            this.player.setDestination(
+              this.player.x,
+              this.player.y + this.map.tileHeight * 2,
+              () => { this.beginCombat( playerRoom, Edge.TOP ); }
+            );
+          }
+          else if ( Edge.BOTTOM === edge ) {
+            this.player.setDestination(
+              this.player.x,
+              this.player.y - this.map.tileHeight * 2,
+              () => { this.beginCombat( playerRoom, Edge.BOTTOM ); }
+            );
+          }
+          else if ( Edge.LEFT === edge ) {
+            this.player.setDestination(
+              this.player.x + this.map.tileWidth * 2,
+              this.player.y,
+              () => { this.beginCombat( playerRoom, Edge.LEFT ); }
+            );
+          }
+          // Right
+          else if ( Edge.RIGHT === edge ) {
+            this.player.setDestination(
+              this.player.x - this.map.tileWidth * 2,
+              this.player.y,
+              () => { this.beginCombat( playerRoom, Edge.RIGHT ); }
+            );
+          }
         }
-        else if ( Edge.BOTTOM === edge ) {
-          this.player.setDestination(
-            this.player.x,
-            this.player.y - this.map.tileHeight * 2,
-            () => { this.beginCombat( playerRoom, Edge.BOTTOM ); }
-          );
-        }
-        else if ( Edge.LEFT === edge ) {
-          this.player.setDestination(
-            this.player.x + this.map.tileWidth * 2,
-            this.player.y,
-            () => { this.beginCombat( playerRoom, Edge.LEFT ); }
-          );
-        }
-        // Right
-        else if ( Edge.RIGHT === edge ) {
-          this.player.setDestination(
-            this.player.x - this.map.tileWidth * 2,
-            this.player.y,
-            () => { this.beginCombat( playerRoom, Edge.RIGHT ); }
-          );
+        // Item Room
+        else if ( playerRoom.type === RoomType.ITEM ) {
+          playerRoom.spawnItem( this );
         }
       }
-      else if ( !playerRoom.entered && playerRoom.type === RoomType.ITEM ) {
-        playerRoom.spawnItem( this );
+
+      // Only reduce room cooloff when entering rooms
+      if ( !( playerRoom instanceof Hallway ) ) {
+        const shouldDelete = [];
+        Object.keys( this.roomCooloffs ).forEach( ( key ) => {
+          this.roomCooloffs[ key ].remaining--;
+          if ( this.roomCooloffs[ key ].remaining <= 0 ) {
+            this.roomCooloffs[ key ].callback();
+            shouldDelete.push( key );
+          }
+        } );
+        shouldDelete.forEach( ( key ) => {
+          delete this.roomCooloffs[ key ];
+        } );
       }
     }
+
     playerRoom.entered = true;
   }
 

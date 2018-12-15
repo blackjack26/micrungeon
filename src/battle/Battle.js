@@ -18,6 +18,13 @@ export default class Battle {
     this.startEdge = edge;
     this.scene = scene;
     this.currentEnemy = null;
+
+    // Cheats
+    // TODO: DELETE THESE
+    this.scene.input.keyboard.createCombo( 'KILL', { deleteOnMatch: true } );
+    this.scene.input.keyboard.on( 'keycombomatch', ( event ) => {
+      this.slayAll();
+    } );
   }
 
   /**
@@ -56,6 +63,20 @@ export default class Battle {
         this.scene.input.keyboard.resetKeys();
       }
     }
+  }
+
+  /**
+   * Slays all of the enemies
+   */
+  slayAll() {
+    this.currentEnemy = null;
+    this.playerTurn = false;
+
+    const enemies = this.scene.enemyGroup.getChildren();
+    for ( let i = enemies.length - 1; i >= 0; i-- ) {
+      enemies[ i ].injure( enemies[ i ].health );
+    }
+    this.scene.endCombat();
   }
 
   /**
@@ -268,7 +289,7 @@ export default class Battle {
 
     // Win
     if ( win ) {
-      this.minigame.enemy.injure( damage );
+      this.scene.player.attack( this.minigame.enemy, damage );
       if ( this.scene.enemyGroup.countActive() === 0 ) {
         this.scene.endCombat();
         this.playerTurn = false;

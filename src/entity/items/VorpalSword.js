@@ -15,4 +15,12 @@ export default class VorpalSword extends Item {
     this.itemType = ItemType.PASSIVE;
     this.name = 'Vorpal Sword';
   }
+
+  /**
+   * @override
+   */
+  onCollide( item, player ) {
+    player.criticalChance += 5;
+    super.onCollide( item, player );
+  }
 }

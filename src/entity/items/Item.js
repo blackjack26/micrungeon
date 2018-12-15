@@ -1,4 +1,5 @@
 import { Entity } from '../';
+import { ItemType } from './';
 
 /**
  * This is the base class for all items
@@ -10,6 +11,7 @@ export default class Item extends Entity {
   constructor( config ) {
     super( config );
     this.scene = config.scene;
+    this.itemType = ItemType.ANY;
 
     // Collision
     this.scene.physics.add.existing( this );
