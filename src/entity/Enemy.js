@@ -1,4 +1,4 @@
-import { Entity } from './';
+import Entity from './Entity';
 import HealthBar from '../battle/HealthBar';
 import BattleDrop from '../battle/BattleDrop';
 
@@ -7,22 +7,47 @@ import BattleDrop from '../battle/BattleDrop';
  */
 export default class Enemy extends Entity {
   /**
-   * @param {object} config The configuration object for the enemy
+   * @constructor
+   * @param {SpriteConfig} config The configuration object for the enemy
    */
   constructor( config ) {
     super( config );
 
     /**
      * List of mini games (the scene key) associated with the entity.
-     * @type {Array}
+     * @type {Array.<string>}
      */
     this.miniGames = [];
+    
+    /**
+     * The health bar to display above the enemy
+     * @type {HealthBar}
+     */
     this.healthBar = new HealthBar( config.scene, {
-      x: config.x - 25, y: config.y - this.height / 2 - 10,
-      width: 50, height: 5
+      x: config.x - 25,
+      y: config.y - this.height / 2 - 10,
+      width: 50,
+      height: 5
     } );
-    this.scene = config.scene;
+    
+    /**
+     * Whether or not the enemy is selected
+     * @type {boolean}
+     */
     this.selected = false;
+    
+    /**
+     * The outline to display around the enemy when the enemy is selected
+     * @type {Phaser.GameObjects.Rectangle}
+     */
+    this.outline = null;
+    
+    /**
+     * Whether or not the enemy is active to be updated
+     * @type {boolean}
+     */
+    this.active = true;
+
     this.setInteractive( { useHandCursor: true } );
   }
 
@@ -63,8 +88,8 @@ export default class Enemy extends Entity {
 
   /**
    * Attacks the given entity and injures them by the given amount
-   * @param  {Entity} entity The entity to attack
-   * @param  {number} amount How much damage to do to the entity
+   * @param {Entity} entity The entity to attack
+   * @param {number} amount How much damage to do to the entity
    */
   attack( entity, amount ) {
     entity.injure( amount );
@@ -91,8 +116,8 @@ export default class Enemy extends Entity {
   }
 
   /**
-   * Gets the key of a mini game from the list of mini games associated
-   * with the enemy
+   * Gets the key of a mini game from the list of mini games associated with the
+   * enemy
    * @return {string|null} A mini game scene key
    */
   getRandomMiniGame() {

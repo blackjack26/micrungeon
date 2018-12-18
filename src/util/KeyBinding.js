@@ -1,3 +1,7 @@
+/**
+ * Collection of common key bindings to use in the game
+ * @type {Map.<string, Phaser.Input.Keyboard.KeyCode>}
+ */
 const BINDINGS = {
   LEFT: Phaser.Input.Keyboard.KeyCodes.A,
   RIGHT: Phaser.Input.Keyboard.KeyCodes.D,

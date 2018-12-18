@@ -1,8 +1,8 @@
 import KeyBinding from '../util/KeyBinding';
 import Dungeon from '../dungeon/Dungeon';
 import Hallway from '../dungeon/Hallway';
-import { Orientation, RoomType, Edge } from '../globals';
-import TILES from '../dungeon/TileMappings';
+import { Edge, Orientation, RoomType } from '../globals';
+import Tileset from '../dungeon/TileMappings';
 import TilemapVisibility from '../dungeon/TilemapVisibility';
 import { Player } from '../entity';
 import Battle from '../battle/Battle';
@@ -16,6 +16,7 @@ import { ItemType } from '../entity/items';
 export default class GameScene extends Phaser.Scene {
   /**
    * Initializes the game scene
+   * @constructor
    */
   constructor() {
     super( { key: 'GameScene' } );
@@ -31,13 +32,83 @@ export default class GameScene extends Phaser.Scene {
    * @override
    */
   create() {
+    /**
+     * A collection of the timeouts currently pending based on the number of
+     * rooms visited since the timeout was added
+     * @type {Map.<string, {remaining: number, callback: function}>}
+     */
     this.roomCooloffs = {};
+    
+    /**
+     * A collection of the keys available for use in the game
+     * @type {Object}
+     */
     this.keys = KeyBinding.createKeys( this,
       [ 'up', 'left', 'right', 'down', 'space', 'interact', 'pause' ] );
+    
+    /**
+     * The scene groups to hold all of the enemies present
+     * @type {Phaser.GameObjects.Group}
+     */
+    this.enemyGroup = this.add.group();
+    
+    /**
+     * The current battle in progress
+     * @type {Battle}
+     */
+    this.battle = null;
+    
+    /**
+     * The dungeon the player is currently in
+     * @type {Dungeon}
+     */
+    this.dungeon = null;
+    
+    /**
+     * The width of the map in pixels
+     * @type {number}
+     */
+    this.mapWidthInPixels = -1;
+    
+    /**
+     * The height of the map in pixels
+     * @type {number}
+     */
+    this.mapHeightInPixels = -1;
+    
+    /**
+     * The current map displayed to the user
+     * @type {Phaser.Tilemaps.Tilemap}
+     */
+    this.map = null;
+    
+    /**
+     * The general layer building the dungeon (walls, floors)
+     * @type {Phaser.Tilemaps.DynamicTilemapLayer}
+     */
+    this.groundLayer = null;
+    
+    /**
+     * The layer that contains all of the objects in the dungeon (i.e. doors)
+     * @type {Phaser.Tilemaps.DynamicTilemapLayer}
+     */
+    this.stuffLayer = null;
+    
+    /**
+     * Used to show / hide the dungeon
+     * @type {TilemapVisibility}
+     */
+    this.tilemapVisibility = null;
+    
+    /**
+     * The player in the dungeon
+     * @type {Player}
+     */
+    this.player = null;
+    
     this.createDungeonMap();
     this.createPlayer();
     this.formatCamera();
-    this.enemyGroup = this.add.group();
     this.configCameraHUD();
   }
 
@@ -68,7 +139,7 @@ export default class GameScene extends Phaser.Scene {
   pause() {
     this.input.keyboard.resetKeys();
     this.scene
-      .launch( 'PauseScene', {parent: this} )
+      .launch( 'PauseScene', { parent: this } )
       .bringToTop( 'PauseScene' )
       .pause();
   }
@@ -107,7 +178,11 @@ export default class GameScene extends Phaser.Scene {
     this.scene.resume();
 
     if ( item && item.itemType === ItemType.ANY ) {
-      item.use( { player: this.player, scene: this, battle: this.battle } );
+      item.use( {
+        player: this.player,
+        scene: this,
+        battle: this.battle
+      } );
       this.player.inventory.items.splice( item.inventoryIndex, 1 );
     }
   }
@@ -139,21 +214,27 @@ export default class GameScene extends Phaser.Scene {
             this.player.setDestination(
               this.player.x,
               this.player.y + this.map.tileHeight * 2,
-              () => { this.beginCombat( playerRoom, Edge.TOP ); }
+              () => {
+                this.beginCombat( playerRoom, Edge.TOP );
+              }
             );
           }
           else if ( Edge.BOTTOM === edge ) {
             this.player.setDestination(
               this.player.x,
               this.player.y - this.map.tileHeight * 2,
-              () => { this.beginCombat( playerRoom, Edge.BOTTOM ); }
+              () => {
+                this.beginCombat( playerRoom, Edge.BOTTOM );
+              }
             );
           }
           else if ( Edge.LEFT === edge ) {
             this.player.setDestination(
               this.player.x + this.map.tileWidth * 2,
               this.player.y,
-              () => { this.beginCombat( playerRoom, Edge.LEFT ); }
+              () => {
+                this.beginCombat( playerRoom, Edge.LEFT );
+              }
             );
           }
           // Right
@@ -161,7 +242,9 @@ export default class GameScene extends Phaser.Scene {
             this.player.setDestination(
               this.player.x - this.map.tileWidth * 2,
               this.player.y,
-              () => { this.beginCombat( playerRoom, Edge.RIGHT ); }
+              () => {
+                this.beginCombat( playerRoom, Edge.RIGHT );
+              }
             );
           }
         }
@@ -228,10 +311,10 @@ export default class GameScene extends Phaser.Scene {
     // Create Tilesets & Layers
     const tileset = map.addTilesetImage( 'dungeon_tiles', null, 32, 32, 1, 2 );
     this.groundLayer =
-      map.createBlankDynamicLayer( 'Ground', tileset ).fill( TILES.BLANK );
+      map.createBlankDynamicLayer( 'Ground', tileset ).fill( Tileset.BLANK );
     this.stuffLayer = map.createBlankDynamicLayer( 'Stuff', tileset );
     const shadowLayer = map.createBlankDynamicLayer( 'Shadow', tileset )
-      .fill( TILES.BLANK );
+      .fill( Tileset.BLANK );
 
     this.tilemapVisibility = new TilemapVisibility( this, shadowLayer );
 
@@ -252,44 +335,44 @@ export default class GameScene extends Phaser.Scene {
 
   /**
    * Creates a hallway on the ground layer
-   * @param  {Hallway} hallway the hallway being added
+   * @param {Hallway} hallway the hallway being added
    */
   createHallway( hallway ) {
     const { width, height, left, right, top, bottom } = hallway;
     if ( hallway.orientation === Orientation.HORIZONTAL ) {
-      this.groundLayer.fill( TILES.WALL.TOP, left, top, width, 1 );
-      this.groundLayer.fill( TILES.FLOOR, left, top + 1, width, 1 );
-      this.groundLayer.fill( TILES.WALL.BOTTOM, left, bottom, width, 1 );
+      this.groundLayer.fill( Tileset.WALL.TOP, left, top, width, 1 );
+      this.groundLayer.fill( Tileset.FLOOR, left, top + 1, width, 1 );
+      this.groundLayer.fill( Tileset.WALL.BOTTOM, left, bottom, width, 1 );
     }
     else if ( hallway.orientation === Orientation.VERTICAL ) {
-      this.groundLayer.fill( TILES.WALL.LEFT, left, top, 1, height );
-      this.groundLayer.fill( TILES.FLOOR, left + 1, top, 1, height );
-      this.groundLayer.fill( TILES.WALL.RIGHT, right, top, 1, height );
+      this.groundLayer.fill( Tileset.WALL.LEFT, left, top, 1, height );
+      this.groundLayer.fill( Tileset.FLOOR, left + 1, top, 1, height );
+      this.groundLayer.fill( Tileset.WALL.RIGHT, right, top, 1, height );
     }
   }
 
   /**
    * Creates a room on the ground layer
-   * @param  {Room} room the room being added
+   * @param {Room} room the room being added
    */
   createRoom( room ) {
     const { x, y, width, height, left, right, top, bottom } = room;
 
     // Fill the floor
-    this.groundLayer.fill( TILES.FLOOR, x + 1, y + 1, width - 2, height - 2 );
+    this.groundLayer.fill( Tileset.FLOOR, x + 1, y + 1, width - 2, height - 2 );
 
     // Place the room corners tiles
-    this.groundLayer.putTileAt( TILES.WALL.TOP_LEFT, left, top );
-    this.groundLayer.putTileAt( TILES.WALL.TOP_RIGHT, right, top );
-    this.groundLayer.putTileAt( TILES.WALL.BOTTOM_LEFT, left, bottom );
-    this.groundLayer.putTileAt( TILES.WALL.BOTTOM_RIGHT, right, bottom );
+    this.groundLayer.putTileAt( Tileset.WALL.TOP_LEFT, left, top );
+    this.groundLayer.putTileAt( Tileset.WALL.TOP_RIGHT, right, top );
+    this.groundLayer.putTileAt( Tileset.WALL.BOTTOM_LEFT, left, bottom );
+    this.groundLayer.putTileAt( Tileset.WALL.BOTTOM_RIGHT, right, bottom );
 
     // Fill the walls
-    this.groundLayer.fill( TILES.WALL.TOP, left + 1, top, width - 2, 1 );
-    this.groundLayer.fill( TILES.WALL.BOTTOM, left + 1,
+    this.groundLayer.fill( Tileset.WALL.TOP, left + 1, top, width - 2, 1 );
+    this.groundLayer.fill( Tileset.WALL.BOTTOM, left + 1,
       bottom, width - 2, 1 );
-    this.groundLayer.fill( TILES.WALL.LEFT, left, top + 1, 1, height - 2 );
-    this.groundLayer.fill( TILES.WALL.RIGHT, right, top + 1,
+    this.groundLayer.fill( Tileset.WALL.LEFT, left, top + 1, 1, height - 2 );
+    this.groundLayer.fill( Tileset.WALL.RIGHT, right, top + 1,
       1, height - 2 );
 
     // Doors
@@ -302,72 +385,72 @@ export default class GameScene extends Phaser.Scene {
     let rt; // Right-Top
     let rb; // Right-Bottom
     room.doors.forEach( ( door ) => {
-      this.groundLayer.putTileAt( TILES.FLOOR,
+      this.groundLayer.putTileAt( Tileset.FLOOR,
         x + door.x, y + door.y );
 
       // TOP
       if ( Edge.TOP === door.edge ) {
         if ( door.x === 1 ) {
-          this.groundLayer.putTilesAt( TILES.DOOR.TOP.LEFT, x, y );
+          this.groundLayer.putTilesAt( Tileset.DOOR.TOP.LEFT, x, y );
           tl = true;
         }
         else if ( door.x === room.width - 2 ) {
-          this.groundLayer.putTilesAt( TILES.DOOR.TOP.RIGHT,
+          this.groundLayer.putTilesAt( Tileset.DOOR.TOP.RIGHT,
             x + door.x - 1, y );
           tr = true;
         }
         else {
-          this.groundLayer.putTilesAt( TILES.DOOR.TOP.MIDDLE,
+          this.groundLayer.putTilesAt( Tileset.DOOR.TOP.MIDDLE,
             x + door.x - 1, y );
         }
       }
       // BOTTOM
       else if ( Edge.BOTTOM === door.edge ) {
         if ( door.x === 1 ) {
-          this.groundLayer.putTilesAt( TILES.DOOR.BOTTOM.LEFT,
+          this.groundLayer.putTilesAt( Tileset.DOOR.BOTTOM.LEFT,
             x, y + height - 1 );
           bl = true;
         }
         else if ( door.x === room.width - 2 ) {
-          this.groundLayer.putTilesAt( TILES.DOOR.BOTTOM.RIGHT,
+          this.groundLayer.putTilesAt( Tileset.DOOR.BOTTOM.RIGHT,
             x + door.x - 1, y + height - 1 );
           br = true;
         }
         else {
-          this.groundLayer.putTilesAt( TILES.DOOR.BOTTOM.MIDDLE,
+          this.groundLayer.putTilesAt( Tileset.DOOR.BOTTOM.MIDDLE,
             x + door.x - 1, y + height - 1 );
         }
       }
       // LEFT
       else if ( Edge.LEFT === door.edge ) {
         if ( door.y === 1 ) {
-          this.groundLayer.putTilesAt( TILES.DOOR.LEFT.TOP, x, y );
+          this.groundLayer.putTilesAt( Tileset.DOOR.LEFT.TOP, x, y );
           lt = true;
         }
         else if ( door.y === room.height - 2 ) {
-          this.groundLayer.putTilesAt( TILES.DOOR.LEFT.BOTTOM,
+          this.groundLayer.putTilesAt( Tileset.DOOR.LEFT.BOTTOM,
             x, y + door.y - 1 );
           lb = true;
         }
         else {
-          this.groundLayer.putTilesAt( TILES.DOOR.LEFT.MIDDLE,
+          this.groundLayer.putTilesAt( Tileset.DOOR.LEFT.MIDDLE,
             x, y + door.y - 1 );
         }
       }
       // RIGHT
       else if ( Edge.RIGHT === door.edge ) {
         if ( door.y === 1 ) {
-          this.groundLayer.putTilesAt( TILES.DOOR.RIGHT.TOP,
+          this.groundLayer.putTilesAt( Tileset.DOOR.RIGHT.TOP,
             x + width - 1, y );
           rt = true;
         }
         else if ( door.y === room.height - 2 ) {
-          this.groundLayer.putTilesAt( TILES.DOOR.RIGHT.BOTTOM,
+          this.groundLayer.putTilesAt( Tileset.DOOR.RIGHT.BOTTOM,
             x + width - 1, y + door.y - 1 );
           rb = true;
         }
         else {
-          this.groundLayer.putTilesAt( TILES.DOOR.RIGHT.MIDDLE,
+          this.groundLayer.putTilesAt( Tileset.DOOR.RIGHT.MIDDLE,
             x + width - 1, y + door.y - 1 );
         }
       }
@@ -375,18 +458,18 @@ export default class GameScene extends Phaser.Scene {
 
     // Check for doors at corners
     if ( tl && lt ) { // Top-Left and Left-Top
-      this.groundLayer.putTileAt( TILES.CORNER.BOTTOM_RIGHT, x, y );
+      this.groundLayer.putTileAt( Tileset.CORNER.BOTTOM_RIGHT, x, y );
     }
     if ( tr && rt ) { // Top-Right and Right-Top
-      this.groundLayer.putTileAt( TILES.CORNER.BOTTOM_LEFT,
+      this.groundLayer.putTileAt( Tileset.CORNER.BOTTOM_LEFT,
         x + width - 1, y );
     }
     if ( bl && lb ) { // Bottom-Left and Left-Bottom
-      this.groundLayer.putTileAt( TILES.CORNER.TOP_RIGHT,
+      this.groundLayer.putTileAt( Tileset.CORNER.TOP_RIGHT,
         x, y + height - 1 );
     }
     if ( br && rb ) { // Bottom-Right and Right-Bottom
-      this.groundLayer.putTileAt( TILES.CORNER.TOP_LEFT,
+      this.groundLayer.putTileAt( Tileset.CORNER.TOP_LEFT,
         x + width - 1, y + height - 1 );
     }
   }
@@ -401,6 +484,12 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.existing( this.player );
 
     this.physics.add.collider( this.player, this.groundLayer );
+    
+    /**
+     * The collider used to detect collisions between the player and the stuff
+     * layer
+     * @type {Phaser.Physics.Arcade.Collider}
+     */
     this.stuffCollider =
       this.physics.add.collider( this.player, this.stuffLayer );
 
@@ -408,8 +497,8 @@ export default class GameScene extends Phaser.Scene {
   }
 
   /**
-   * Formats the camera to the generated dungeon, starts following the
-   * player object, and sets the render pipelines for layers affected by light
+   * Formats the camera to the generated dungeon, starts following the player
+   * object, and sets the render pipelines for layers affected by light
    */
   formatCamera() {
     const camera = this.cameras.main;

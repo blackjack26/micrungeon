@@ -3,23 +3,29 @@ import Tiles from './Tiles';
 import { Orientation } from '../globals';
 
 /**
- * A hallway is a simplified room that is used as a connector between two
- * other rooms.
+ * A hallway is a simplified room that is used as a connector between two other
+ * rooms.
  */
 export default class Hallway extends Room {
   /**
+   * @constructor
    * @param {number} width The width of the hallway
    * @param {number} height The height of the hallway
    */
   constructor( width, height ) {
     super( width, height );
+    
+    /**
+     * The type of room
+     * @type {RoomType}
+     */
     this.type = RoomType.HALLWAY;
   }
 
   /**
    * Creates a Hallway from the given two doors
-   * @param {object} door1 The first door
-   * @param {object} door2 The second door
+   * @param {TilePosition} door1 The first door
+   * @param {TilePosition} door2 The second door
    * @return {Hallway} The constructed hallway
    */
   static fromDoors( door1, door2 ) {

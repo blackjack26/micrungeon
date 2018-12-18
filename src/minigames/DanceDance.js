@@ -8,14 +8,59 @@ import { Difficulty, MiniGame } from './';
 export default class DanceDance extends MiniGame {
   /**
    * Creates a DanceDance mini game object
+   * @constructor
    */
   constructor() {
     super( 'DanceDance' );
+    
+    /**
+     * The name of the minigame
+     * @type {string}
+     */
     this.name = 'Dance Dance';
+    
+    /**
+     * The description of the minigame
+     * @type {string}
+     */
     this.description = 'The player has to do the arrow combination displayed ' +
       'before the time runs out';
+    
+    /**
+     * The text displayed quickly to the user before the minigame begins
+     * @type {string}
+     */
     this.text = 'Dance!';
+    
+    /**
+     * The time duration of the mini game in ms
+     * @type {number}
+     */
     this.duration = 3000;
+    
+    /**
+     * The length of the combo required to successfully complete the minigame
+     * @type {number}
+     */
+    this.comboLength = -1;
+    
+    /**
+     * The key combination required to complete the minigame
+     * @type {Phaser.Input.Keyboard.KeyCombo}
+     */
+    this.combo = null;
+    
+    /**
+     * The text displayed to the user to show the combination required
+     * @type {Phaser.GameObjects.Text}
+     */
+    this.danceText = null;
+    
+    /**
+     * The number of times the key was pressed during the minigame
+     * @type {number}
+     */
+    this.inputCount = 0;
   }
 
   /**
@@ -40,14 +85,16 @@ export default class DanceDance extends MiniGame {
 
     // Create Key Combination
     const dirs = [ 'W', 'A', 'S', 'D' ];
-    this.keyCombo = [];
-    while ( this.keyCombo.length < this.comboLength ) {
-      this.keyCombo.push( dirs[ Math.floor( Math.random() * 4 ) ] );
+    const keyCombo = [];
+    while ( keyCombo.length < this.comboLength ) {
+      keyCombo.push( dirs[ Math.floor( Math.random() * 4 ) ] );
     }
     this.combo = this.input.keyboard.createCombo(
-      this.keyCombo, { resetOnWrongKey: true }
+      keyCombo, { resetOnWrongKey: true }
     );
-    this.comboListener = this.input.keyboard.on( 'keycombomatch', () => {
+    
+    // On combo match, win mini game
+    this.input.keyboard.on( 'keycombomatch', () => {
       this.win();
     } );
 
@@ -58,9 +105,9 @@ export default class DanceDance extends MiniGame {
 
     // Create the display text for the combination
     if ( this.difficulty === Difficulty.ADVANCED ) {
-      this.keyCombo.reverse();
+      keyCombo.reverse();
     }
-    const txt = this.keyCombo.map( ( l ) => {
+    const txt = keyCombo.map( ( l ) => {
       switch ( l ) {
         case 'W':
           return '↑';
@@ -77,7 +124,10 @@ export default class DanceDance extends MiniGame {
     this.danceText = this.add.text(
       this.w / 2,
       this.h / 2,
-      txt, { fontSize: '40px', fill: '#FFF' }
+      txt, {
+        fontSize: '40px',
+        fill: '#FFF'
+      }
     );
     this.danceText.setPosition(
       this.danceText.x - this.danceText.width / 2,

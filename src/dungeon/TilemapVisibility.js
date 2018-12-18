@@ -2,25 +2,45 @@ import Hallway from './Hallway';
 import { Orientation } from '../globals';
 
 /**
- * This class manages how the dungeon is displayed to the user based on
- * the player's current room.
+ * This class manages how the dungeon is displayed to the user based on the
+ * player's current room.
  */
 export default class TilemapVisibility {
   /**
+   * @constructor
    * @param {Phaser.Scene} scene The main scene running the game
-   * @param {Phaser.Tilemaps.DynamicTilemapLayer} shadowLayer The layer to
-   *   show / hide the dungeon
+   * @param {Phaser.Tilemaps.DynamicTilemapLayer} shadowLayer The layer to show
+   *          or hide the dungeon
    */
   constructor( scene, shadowLayer ) {
+    /**
+     * The main scene running the game
+     * @type {Phaser.Scene}
+     */
     this.scene = scene;
+    
+    /**
+     * The layer to show / hide the dungeon
+     * @type {Phaser.Tilemaps.DynamicTilemapLayer}
+     */
     this.shadowLayer = shadowLayer;
+    
+    /**
+     * The current active room where the player is located
+     * @type {Room}
+     */
     this.activeRoom = null;
+    
+    /**
+     * The current active hallway where the player is located
+     * @type {Hallway}
+     */
     this.activeHall = null;
   }
 
   /**
-   * Sets the current active room where the player is located. The room
-   * can also be a hallway.
+   * Sets the current active room where the player is located. The room can also
+   * be a hallway.
    * @param {Room} room The current room the player is in
    * @return {boolean}
    */
@@ -62,7 +82,9 @@ export default class TilemapVisibility {
       }
     }
     this.shadowLayer.forEachTile(
-      ( t ) => { t.setAlpha( 0 ); },
+      ( t ) => {
+        t.setAlpha( 0 );
+      },
       this, x, y, width, height
     );
   }
@@ -107,7 +129,7 @@ export default class TilemapVisibility {
   /**
    * Dims the lights in the given room. Once the light is dimmed, it is removed
    * from the game to ease up graphics.
-   * @param  {Room} room The room to dim
+   * @param {Room} room The room to dim
    */
   dimLights( room ) {
     if ( room.light ) {

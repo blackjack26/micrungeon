@@ -9,15 +9,59 @@ import TILES from '../dungeon/TileMappings';
 export default class Battle {
   /**
    * Creates the battle room
+   * @constructor
    * @param {Room} room The room the battle is occurring in
-   * @param {number} edge The edge the player entered from
+   * @param {Edge} edge The edge the player entered from
    * @param {Phaser.Scene} scene The current scene
    */
   constructor( room, edge, scene ) {
+    /**
+     * The room the battle is occurring in
+     * @type {Room}
+     */
     this.room = room;
+    
+    /**
+     * The edge the player entered from
+     * @type {Edge}
+     */
     this.startEdge = edge;
+    
+    /**
+     * The current scene
+     * @type {Phaser.Scene}
+     */
     this.scene = scene;
+    
+    /**
+     * The enemy that is currently selected in the battle
+     * @type {Enemy}
+     */
     this.currentEnemy = null;
+    
+    /**
+     * The index of the currently selected enemy
+     * @type {number}
+     */
+    this.enemyIndex = 0;
+    
+    /**
+     * Whether or not it is the player's turn
+     * @type {boolean}
+     */
+    this.playerTurn = false;
+    
+    /**
+     * Whether or not the battle is active and running
+     * @type {boolean}
+     */
+    this.active = false;
+    
+    /**
+     * Stores information about the minigame currently being played
+     * @type {{ game: Phaser.Scene, enemy: Enemy }}
+     */
+    this.minigame = null;
 
     // Cheats
     // TODO: DELETE THESE
@@ -98,7 +142,7 @@ export default class Battle {
             this.currentEnemy = enemy;
             this.currentEnemy.select();
             this.enemyIndex =
-              this.scene.enemyGroup.getChildren().indexOf( enemy );
+            this.scene.enemyGroup.getChildren().indexOf( enemy );
           } );
         } );
       } )
@@ -129,7 +173,9 @@ export default class Battle {
    * Moves the player to face enemies
    */
   movePlayer() {
-    const callback = () => { this.scene.player.movementDisabled = true; };
+    const callback = () => {
+      this.scene.player.movementDisabled = true;
+    };
     if ( this.startEdge === Edge.TOP ) {
       this.scene.player.setDestination(
         this.scene.map.tileToWorldX( this.room.centerX + 0.5 ),

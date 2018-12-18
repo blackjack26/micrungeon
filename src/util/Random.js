@@ -1,14 +1,18 @@
 import seedrandom from 'seedrandom';
 
 /**
- * A utility class that provides functions for random number generation based
- * on a given seed value
+ * A utility class that provides functions for random number generation based on
+ * a given seed value
  */
 export default class Random {
   /**
    * @param {number} seedValue The seed value for RNG
    */
   constructor( seedValue ) {
+    /**
+     * The random number generator used for this instance
+     * @type {function}
+     */
     this.rng = seedrandom( seedValue );
   }
 
@@ -17,7 +21,7 @@ export default class Random {
    * @param {number} min The minimum value the integer can be
    * @param {number} max The maximum value the integer can be
    * @param {boolean|undefined} even True = Only Even, False = Only Odd,
-   *  Undefined = Odd and Even
+   *          Undefined = Odd and Even
    * @return {number} A random integer
    */
   randInt( min, max, even = undefined ) {

@@ -1,13 +1,24 @@
+/**
+ * Constant used to simplify calling the
+ * Phaser.Renderer.WebGL.Pipelines.TextureTintPipeline class
+ * @type {Phaser.Renderer.WebGL.Pipelines.TextureTintPipeline}
+ */
 const TextureTintPipeline = Phaser.Renderer.WebGL.Pipelines.TextureTintPipeline;
+
+/**
+ * The maximum number of lights allowed to render in a scene
+ * @type {number}
+ */
 let LIGHT_COUNT = 10;
 
 /**
  * Custom light pipeline to fix issues with the current diffuse lighting
  * pipeline.
  */
-export default class LightPipeline extends
-  Phaser.Renderer.WebGL.Pipelines.ForwardDiffuseLightPipeline {
+export default class LightPipeline
+  extends Phaser.Renderer.WebGL.Pipelines.ForwardDiffuseLightPipeline {
   /**
+   * @constructor
    * @override
    */
   constructor( config ) {
@@ -100,13 +111,17 @@ export default class LightPipeline extends
    * @override
    */
   onRender( scene, camera ) {
+    /**
+     * Whether or not the pipeline is active
+     * @type {boolean}
+     */
     this.active = false;
 
     const lightManager = scene.sys.lights;
 
     if ( !lightManager || lightManager.lights.length <= 0 ||
       !lightManager.active ) {
-      //  Passthru
+      // Passthru
       return this;
     }
 
@@ -122,12 +137,15 @@ export default class LightPipeline extends
     const renderer = this.renderer;
     const program = this.program;
     const cameraMatrix = camera.matrix;
-    const point = {x: 0, y: 0};
+    const point = {
+      x: 0,
+      y: 0
+    };
     const height = renderer.height;
     let index;
 
     for ( index = 0; index < LIGHT_COUNT; ++index ) {
-      //  Reset lights
+      // Reset lights
       renderer.setFloat1( program, 'uLights[' + index + '].radius', 0 );
     }
 
@@ -146,7 +164,7 @@ export default class LightPipeline extends
       renderer.setFloat2( program, lightName + 'position',
         point.x - ( camera.scrollX * light.scrollFactorX * camera.zoom ),
         height - ( point.y - ( camera.scrollY * light.scrollFactorY ) *
-          camera.zoom )
+        camera.zoom )
       );
       renderer.setFloat3( program, lightName + 'color',
         light.r, light.g, light.b );
@@ -260,7 +278,7 @@ export default class LightPipeline extends
       y = -displayOriginY + frameY;
     }
 
-    //  Invert the flipY if this is a RenderTexture
+    // Invert the flipY if this is a RenderTexture
     flipY = flipY ^ ( texture.isRenderTexture ? 1 : 0 );
 
     if ( flipX ) {
@@ -281,22 +299,22 @@ export default class LightPipeline extends
     camMatrix.copyFrom( camera.matrix );
 
     if ( parentTransformMatrix ) {
-      //  Multiply the camera by the parent matrix
+      // Multiply the camera by the parent matrix
       camMatrix.multiplyWithOffset( parentTransformMatrix,
         -camera.scrollX * scrollFactorX, -camera.scrollY * scrollFactorY );
 
-      //  Undo the camera scroll
+      // Undo the camera scroll
       spriteMatrix.e = srcX;
       spriteMatrix.f = srcY;
 
-      //  Multiply by the Sprite matrix, store result in calcMatrix
+      // Multiply by the Sprite matrix, store result in calcMatrix
       camMatrix.multiply( spriteMatrix, calcMatrix );
     }
     else {
       spriteMatrix.e -= camera.scrollX * scrollFactorX;
       spriteMatrix.f -= camera.scrollY * scrollFactorY;
 
-      //  Multiply by the Sprite matrix, store result in calcMatrix
+      // Multiply by the Sprite matrix, store result in calcMatrix
       camMatrix.multiply( spriteMatrix, calcMatrix );
     }
 

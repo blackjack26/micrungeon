@@ -1,14 +1,20 @@
 import KeyBinding from '../util/KeyBinding';
 
 /**
- *
+ * The pause scene is the scene displayed when hitting the ESC key in the game
  */
 export default class PauseScene extends Phaser.Scene {
   /**
-   *
+   * @constructor
    */
   constructor() {
     super( { key: 'PauseScene' } );
+    
+    /**
+     * The parent scene used to initiate this scene
+     * @type {Phaser.Scene}
+     */
+    this.parent = null;
   }
 
   /**
@@ -17,6 +23,11 @@ export default class PauseScene extends Phaser.Scene {
    */
   create( data ) {
     this.parent = data.parent;
+    
+    /**
+     * A collection of keys available for use in the inventory
+     * @type {Object}
+     */
     this.keys = KeyBinding.createKeys( this,
       [ 'up', 'left', 'right', 'down', 'space', 'pause' ] );
 
@@ -28,7 +39,7 @@ export default class PauseScene extends Phaser.Scene {
     background.fillRect( 0, 0, width, height );
 
     WebFont.load( {
-      google: {families: [ 'Rye' ]},
+      google: { families: [ 'Rye' ] },
       active: () => {
         const titleText = this.add.text( width / 2, 10, 'Pause Menu', {
           fontSize: '40px',

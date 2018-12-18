@@ -1,4 +1,4 @@
-import { Entity } from './';
+import Entity from './Entity';
 import HealthBar from '../battle/HealthBar';
 import { Inventory } from './items';
 import Random from '../util/Random';
@@ -8,7 +8,10 @@ import Random from '../util/Random';
  */
 export default class Player extends Entity {
   /**
-   * @override
+   * @constructor
+   * @param {number} x The horizontal position
+   * @param {number} y The vertical position
+   * @param {Phaser.Scene} scene The current scene
    */
   constructor( x, y, scene ) {
     super( {
@@ -17,10 +20,50 @@ export default class Player extends Entity {
       x: x,
       y: y
     } );
+    
+    /**
+     * The player's inventory to hold items
+     * @type {Inventory}
+     */
     this.inventory = new Inventory();
+    
+    /**
+     * The players movement speed in the world
+     * @type {number}
+     */
     this.speed = 200;
+    
+    /**
+     * If true, the player cannot move by use of the keyboard / controller
+     * @type {boolean}
+     */
     this.movementDisabled = false;
+    
+    /**
+     * The chance that a critical hit will happen (0-100)
+     * @type {number}
+     */
     this.criticalChance = 0;
+    
+    /**
+     * Whether or not the player is alive
+     * @type {boolean}
+     */
+    this.alive = true;
+    
+    /**
+     * The movement destination of the player. Used when moving the player
+     * without the use of the keyboard.
+     * @type {{ x: number, y: number }}
+     */
+    this.dest = null;
+    
+    /**
+     * The callback when automatic player movement is finished
+     * @type {function}
+     */
+    this.movementCallback = null;
+    
     // this.anims.play( 'sample' );
     this.setHealth( 10 );
     this.drawPlayerHUD();
@@ -43,6 +86,10 @@ export default class Player extends Entity {
     );
     healthTxt.setShadow( 0, 2, '#000', 10 );
 
+    /**
+     * The player's health bar
+     * @type {HealthBar}
+     */
     this.healthBar = new HealthBar( this.scene, {
       x: healthTxt.x + healthTxt.width + 10,
       y: 12,
@@ -137,7 +184,7 @@ export default class Player extends Entity {
    * Sets the destination for the player to move to
    * @param {number} x The x-coordinate
    * @param {number} y The y-coordinate
-   * @param {*} callback The callback when the movement is finished
+   * @param {function} callback The callback when the movement is finished
    */
   setDestination( x, y, callback ) {
     this.dest = {

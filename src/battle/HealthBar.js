@@ -3,82 +3,128 @@
  */
 export default class HealthBar {
   /**
+   * @constructor
    * @param {Phaser.Scene} scene The current scene
-   * @param {object} config The altered config
+   * @param {HealthBarConfig} config The altered config
    */
   constructor( scene, config ) {
+    /**
+     * The current scene
+     * @type {Phaser.Scene}
+     */
     this.scene = scene;
-    this.config = this.mergeWithDefaultConfig( config );
+    
+    /**
+     * The configuration for the health bar
+     * @type {HealthBarConfig}
+     */
+    this.config = this._mergeWithDefaultConfig( config );
+    
+    /**
+     * The horizontal position in the world
+     * @type {number}
+     */
+    this.x = 0;
+    
+    /**
+     * The vertical position in the world
+     * @type {number}
+     */
+    this.y = 0;
+    
+    /**
+     * The border graphic around the health bar
+     * @private
+     * @type {Phaser.GameObjects.Rectangle}
+     */
+    this._border = null;
+    
+    /**
+     * The background graphic behind the health bar
+     * @private
+     * @type {Phaser.GameObjects.Rectangle}
+     */
+    this._background = null;
+    
+    /**
+     * The bar graphic to display the health
+     * @private
+     * @type {Phaser.GameObjects.Rectangle}
+     */
+    this._bar = null;
+    
     this.setPosition( this.config.x, this.config.y );
-    this.drawBackground();
-    this.drawBorder();
-    this.drawHealthBar();
+    this._drawBackground();
+    this._drawBorder();
+    this._drawHealthBar();
   }
 
   /**
    * Merges the given config with the defaults
-   * @param  {object} config The given config
-   * @return {object} the merged config object
+   * @private
+   * @param {HealthBarConfig} config The given config
+   * @return {HealthBarConfig} the merged config object
    */
-  mergeWithDefaultConfig( config ) {
+  _mergeWithDefaultConfig( config ) {
     const defaultConfig = {
       width: 250,
       height: 40,
       x: 0,
       y: 0,
-      background: { color: 0x651828 },
-      bar: { color: 0xFF0000 },
+      backgroundColor: 0x651828,
+      barColor: 0xFF0000,
       border: {
         color: 0x000000,
         width: 1
       },
-      animationDuration: 200,
-      flipped: false,
-      isFixedToCamera: false
+      animationDuration: 200
     };
     return Object.assign( {}, defaultConfig, config );
   }
 
   /**
    * Draws the border of the health bar
+   * @private
    */
-  drawBorder() {
+  _drawBorder() {
     const { x, y, width, height } = this.config;
     const bw = this.config.border.width;
-    this.border = this.scene.add.rectangle( x - bw, y - bw,
+    this._border = this.scene.add.rectangle( x - bw, y - bw,
       width + bw * 2, height + bw * 2 );
-    this.border.setStrokeStyle( this.config.border.color );
-    this.border.lineWidth = bw;
-    this.border.setOrigin( 0, 0 );
+    this._border.setStrokeStyle( this.config.border.color );
+    this._border.lineWidth = bw;
+    this._border.setOrigin( 0, 0 );
   }
 
   /**
    * Draws the background of the health bar
+   * @private
    */
-  drawBackground() {
+  _drawBackground() {
     const { x, y, width, height } = this.config;
-    this.background = this.scene.add.rectangle( x, y, width, height,
-      this.config.background.color );
-    this.background.setOrigin( 0, 0 );
+    this._background = this.scene.add.rectangle( x, y, width, height,
+      this.config.backgroundColor );
+    this._background.setOrigin( 0, 0 );
   }
 
   /**
    * Draws the health bar
+   * @private
    */
-  drawHealthBar() {
+  _drawHealthBar() {
     const { x, y, width, height } = this.config;
-    this.bar = this.scene.add.rectangle( x, y, width, height,
-      this.config.bar.color );
-    this.bar.setOrigin( 0, 0 );
+    this._bar = this.scene.add.rectangle( x, y, width, height,
+      this.config.barColor );
+    this._bar.setOrigin( 0, 0 );
   }
 
   /**
    * Destroys the health bar
    */
   destroy() {
-    this.bar.destroy();
-    this.border.destroy();
-    this.background.destroy();
+    this._bar.destroy();
+    this._border.destroy();
+    this._background.destroy();
   }
 
   /**
@@ -101,7 +147,7 @@ export default class HealthBar {
    */
   setWidth( width ) {
     this.scene.add.tween( {
-      targets: this.bar,
+      targets: this._bar,
       duration: this.config.animationDuration,
       width: width,
       ease: 'Linear'
@@ -113,11 +159,11 @@ export default class HealthBar {
    * @param {number} color The new color
    */
   setBarColor( color ) {
-    if ( !this.bar ) {
+    if ( !this._bar ) {
       return;
     }
 
-    this.bar.fillColor = color;
+    this._bar.fillColor = color;
   }
 
   /**
@@ -129,10 +175,10 @@ export default class HealthBar {
     this.x = x;
     this.y = y;
 
-    if ( this.border && this.background && this.bar ) {
-      this.border.setPosition( x, y );
-      this.background.setPosition( x, y );
-      this.bar.setPosition( x, y );
+    if ( this._border && this._background && this._bar ) {
+      this._border.setPosition( x, y );
+      this._background.setPosition( x, y );
+      this._bar.setPosition( x, y );
     }
   }
 }

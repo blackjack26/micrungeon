@@ -11,8 +11,18 @@ export default class VorpalSword extends Item {
    * @param {Phaser.Scene} scene The current scene
    */
   constructor( x, y, scene ) {
-    super( {x: x, y: y, scene: scene, key: 'vorpal_sword'} );
+    super( { x: x, y: y, scene: scene, key: 'vorpal_sword' } );
+    
+    /**
+     * This is a passive item
+     * @type {ItemType}
+     */
     this.itemType = ItemType.PASSIVE;
+    
+    /**
+     * The name of the item
+     * @type {string}
+     */
     this.name = 'Vorpal Sword';
   }
 

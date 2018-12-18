@@ -2,17 +2,46 @@ import KeyBinding from '../util/KeyBinding';
 import { itemClass } from '../entity/items';
 
 /**
- * The inventory scene is the scene that displays the inventory to the
- * player.
+ * The inventory scene is the scene that displays the inventory to the player.
  */
 export default class InventoryScene extends Phaser.Scene {
   /**
    * Initializes the inventory scene
+   * @constructor
    */
   constructor() {
     super( { key: 'InventoryScene' } );
+    
+    /**
+     * The horizontal position of the scene
+     * @type {number}
+     */
     this.x = 25;
+    
+    /**
+     * The vertical position of the scene
+     * @type {number}
+     */
     this.y = 25;
+    
+    /**
+     * The parent scene used to initiate this scene
+     * @type {Phaser.Scene}
+     */
+    this.parent = null;
+    
+    /**
+     * The inventory to display
+     * @type {Inventory}
+     */
+    this.inventory = null;
+    
+    /**
+     * The item context to help display to the user only the items that can be
+     * used at that given time
+     * @type {ItemType}
+     */
+    this.context = null;
   }
 
   /**
@@ -23,7 +52,17 @@ export default class InventoryScene extends Phaser.Scene {
     this.parent = data.parent;
     this.inventory = data.inventory;
     this.context = data.context;
+    
+    /**
+     * The width of the game
+     * @type {number}
+     */
     this.w = this.sys.game.config.width;
+    
+    /**
+     * The height of the game
+     * @type {number}
+     */
     this.h = this.sys.game.config.height;
 
     WebFont.load( {
@@ -48,6 +87,10 @@ export default class InventoryScene extends Phaser.Scene {
     border.lineStyle( 4, 0x7b654f, 1 );
     border.strokeRect( this.x, this.y, this.w - 50, this.h - 50 );
 
+    /**
+     * A collection of keys available for use in the inventory
+     * @type {Object}
+     */
     this.keys = KeyBinding.createKeys( this,
       [ 'up', 'left', 'right', 'down', 'space', 'interact' ] );
 

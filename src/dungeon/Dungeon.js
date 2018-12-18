@@ -6,6 +6,7 @@ import { Direction } from '../globals';
 
 /**
  * The default config for the dungeon
+ * @type {DungeonConfig}
  */
 const baseConfig = {
   width: 55,
@@ -13,8 +14,16 @@ const baseConfig = {
   randomSeed: undefined,
   doorPadding: 1,
   rooms: {
-    width: { min: 7, max: 21, even: false },
-    height: { min: 7, max: 17, even: false },
+    width: {
+      min: 7,
+      max: 21,
+      even: false
+    },
+    height: {
+      min: 7,
+      max: 17,
+      even: false
+    },
     maxArea: 250,
     maxRooms: 50
   }
@@ -55,7 +64,8 @@ const MAX_RETRY_COUNT = 150;
  */
 export default class Dungeon {
   /**
-   * @param {object} config
+   * @constructor
+   * @param {DungeonConfig} config
    */
   constructor( config = {} ) {
     const rooms = config.rooms || {};
@@ -74,29 +84,70 @@ export default class Dungeon {
     const minArea = rooms.width.min * rooms.height.min;
     rooms.maxArea = Math.max( rooms.maxArea, minArea );
 
+    /**
+     * The number of tiles required on each side of a door
+     * @type {number}
+     */
     this.doorPadding = config.doorPadding || baseConfig.doorPadding;
+    
+    /**
+     * The width of the dungeon in tiles
+     * @type {number}
+     */
     this.width = config.width || baseConfig.width;
+    
+    /**
+     * The height of the dungeon in tiles
+     * @type {number}
+     */
     this.height = config.height || baseConfig.height;
+    
+    /**
+     * The configuration for room generation
+     * @type {RoomConfig}
+     */
     this.roomConfig = rooms;
 
     /**
      * The list of rooms in the dungeon
-     * @type {Room[]}
+     * @type {Array.<Room>}
      */
     this.rooms = [];
+    
+    /**
+     * The random number generator
+     * @private
+     * @type {Random}
+     */
     this.r = new Random( config.randomSeed );
 
     /**
-     * 2D grid matching map dimensions where every element contains an array
-     * of all the rooms in that location
-     * @type {[[Room[]]]}
+     * 2D grid matching map dimensions where every element contains an array of
+     * all the rooms in that location
+     * @type {Array.<Array.<Array.<Room>>>}
      */
     this.roomGrid = [];
 
+    /**
+     * A map of the connections between rooms and hallways
+     * @type {Object}
+     */
     this.connections = {};
+    
+    /**
+     * The starting room for the dungeon
+     * @type {Room}
+     */
+    this.startRoom = null;
 
     this.generate();
+    
+    /**
+     * The full map of the dungeon
+     * @type {Array.<Array.<Tiles>>}
+     */
     this.tiles = this.getTiles();
+    
     this.rooms.forEach( ( room ) => room.updateDoorPositions() );
   }
 
@@ -144,6 +195,7 @@ export default class Dungeon {
 
   /**
    * Creates a room of random width and height
+   * @private
    * @return {Room} the created room
    */
   createRandomRoom() {
@@ -166,6 +218,7 @@ export default class Dungeon {
 
   /**
    * Creates a new room and tries to add it to the dungeon
+   * @private
    */
   generateRoom() {
     const room = this.createRandomRoom();
@@ -200,8 +253,9 @@ export default class Dungeon {
   }
 
   /**
-   * Generates two random hallways between two random rooms to try and make
-   * a loop in the dungeon.
+   * Generates two random hallways between two random rooms to try and make a
+   * loop in the dungeon.
+   * @private
    */
   generateRandomHallways() {
     let count = 0;
@@ -250,7 +304,10 @@ export default class Dungeon {
       }
 
       const [ door1, door2 ] = this.findNewDoorLocation( room1,
-        { target: room2, direction: direction } );
+        {
+          target: room2,
+          direction: direction
+        } );
       const dist = Math.sqrt( Math.pow( door1.x - door2.x, 2 ) +
         Math.pow( door1.y - door2.y, 2 ) );
 
@@ -273,6 +330,7 @@ export default class Dungeon {
 
   /**
    * Selects the rooms in the dungeon that are small and places items in them
+   * @private
    */
   selectItemRooms() {
     this.rooms
@@ -286,6 +344,7 @@ export default class Dungeon {
 
   /**
    * Selects the starting room
+   * @private
    */
   selectStartRoom() {
     /**
@@ -306,6 +365,7 @@ export default class Dungeon {
 
   /**
    * Selects the ending room
+   * @private
    */
   selectEndRoom() {
     /**
@@ -325,6 +385,7 @@ export default class Dungeon {
 
   /**
    * Adds a room to the current dungeon
+   * @private
    * @param {Room} room The room to add
    * @return {boolean} True if the room was successfully added
    */
@@ -349,6 +410,7 @@ export default class Dungeon {
 
   /**
    * Removes a room from the current dungeon
+   * @private
    * @param {Room} room The room to remove
    */
   removeRoom( room ) {
@@ -363,7 +425,8 @@ export default class Dungeon {
 
   /**
    * Adds a door between rooms in a dungeon
-   * @param {object} position The position of the door
+   * @private
+   * @param {TilePosition} position The position of the door
    */
   addDoor( position ) {
     // Get all the rooms at the location of the door
@@ -380,8 +443,9 @@ export default class Dungeon {
 
   /**
    * Adds a hallway between two doors in the dungeon
-   * @param {object} door1 The first door
-   * @param {object} door2 The second door
+   * @private
+   * @param {TilePosition} door1 The first door
+   * @param {TilePosition} door2 The second door
    * @param {number} dist The distance between the two doors
    * @return {boolean} True if the hallway could be added (or no hallway)
    */
@@ -399,8 +463,9 @@ export default class Dungeon {
 
   /**
    * Finds a room that the given room can be placed next to
+   * @private
    * @param {Room} room The room to place
-   * @return {object} The position for the new room and target room
+   * @return {RoomAttachment} The position for the new room and target room
    */
   findRoomAttachment( room ) {
     // Pick a random room (filter out the hallways)
@@ -447,14 +512,21 @@ export default class Dungeon {
 
   /**
    * Gets the location for the two new doors
+   * @private
    * @param {Room} room1 The first room
-   * @param {Room} room2 The second room
-   * @param {number} direction The direction of room1 in relation to room2
-   * @return {*[]} an array of door positions
+   * @param {{target: Room, direction: Direction}} obj The second room and
+   *          direction
+   * @return {Array.<TilePosition>} an array of door positions
    */
   findNewDoorLocation( room1, { target: room2, direction } ) {
-    const door1 = { x: -1, y: -1 };
-    const door2 = { x: -1, y: -1 };
+    const door1 = {
+      x: -1,
+      y: -1
+    };
+    const door2 = {
+      x: -1,
+      y: -1
+    };
 
     if ( Direction.NORTH === direction ) {
       door1.x = door2.x = this.r.randInt(
@@ -496,6 +568,7 @@ export default class Dungeon {
 
   /**
    * Checks to see if the given room can fit inside the dungeon
+   * @private
    * @param {Room} room The room to check
    * @return {boolean} True if the room can fit in the dungeon
    */
@@ -519,7 +592,7 @@ export default class Dungeon {
 
   /**
    * Gets the full map of the dungeon
-   * @return {[[]]} 2D map of the dungeon
+   * @return {Array.<Array.<Tiles>>} 2D map of the dungeon
    */
   getTiles() {
     const tiles = Array( this.height );
@@ -544,8 +617,8 @@ export default class Dungeon {
 
   /**
    * Gets the room at the specified location
-   * @param {number} x The x-coordinate
-   * @param {number} y The y-coordinate
+   * @param {number} x The horizontal tile position
+   * @param {number} y The vertical tile position
    * @return {Room|null} The room at the coordinate
    */
   getRoomAt( x, y ) {
