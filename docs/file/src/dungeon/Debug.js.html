@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/dungeon/Debug.js | micrungeon</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="Phaser 3 hybrid game"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="micrungeon"><meta property="twitter:description" content="Phaser 3 hybrid game"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/blackjack26/micrungeon"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Difficulty">Difficulty</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Direction">Direction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Edge">Edge</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Orientation">Orientation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RoomType">RoomType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Door">Door</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-DungeonConfig">DungeonConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HealthBarConfig">HealthBarConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ItemUseConfig">ItemUseConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-RandomNumberRange">RandomNumberRange</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-RoomAttachment">RoomAttachment</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-RoomConfig">RoomConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SpriteConfig">SpriteConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-TilePosition">TilePosition</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#battle">battle</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/battle/Battle.js~Battle.html">Battle</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/battle/BattleDrop.js~BattleDrop.html">BattleDrop</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/battle/HealthBar.js~HealthBar.html">HealthBar</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#dungeon">dungeon</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/Dungeon.js~Dungeon.html">Dungeon</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/Hallway.js~Hallway.html">Hallway</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/Room.js~Room.html">Room</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/TilemapVisibility.js~TilemapVisibility.html">TilemapVisibility</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-debugMap">debugMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Tileset">Tileset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Tiles">Tiles</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#entity">entity</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/Enemy.js~Enemy.html">Enemy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/Player.js~Player.html">Player</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#entity-items">entity/items</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/BugSpray.js~BugSpray.html">BugSpray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Injection.js~Injection.html">Injection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Inventory.js~Inventory.html">Inventory</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Item.js~Item.html">Item</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/ItemDrop.js~ItemDrop.html">ItemDrop</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Timelapse.js~Timelapse.html">Timelapse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/VorpalSword.js~VorpalSword.html">VorpalSword</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-itemClass">itemClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ItemType">ItemType</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#minigames">minigames</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/minigames/DanceDance.js~DanceDance.html">DanceDance</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/minigames/MiniGame.js~MiniGame.html">MiniGame</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scenes">scenes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/BootScene.js~BootScene.html">BootScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/GameScene.js~GameScene.html">GameScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/InventoryScene.js~InventoryScene.html">InventoryScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/PauseScene.js~PauseScene.html">PauseScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/TitleScene.js~TitleScene.html">TitleScene</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scenes-elements">scenes/elements</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/elements/Message.js~Message.html">Message</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#util">util</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/util/KeyBinding.js~KeyBinding.html">KeyBinding</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/util/LightPipeline.js~LightPipeline.html">LightPipeline</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/util/Random.js~Random.html">Random</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-addDynamicAnim">addDynamicAnim</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-addStaticAnim">addStaticAnim</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createAnimations">createAnimations</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/dungeon/Debug.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Tiles from &apos;./Tiles&apos;;
+
+/**
+ * Logs the dungeon map to the console in a colored table structure
+ * @param {Dungeon} dungeon The dungeon to map
+ * @param {object} config The debug map configuration
+ */
+export function debugMap( dungeon, config = {} ) {
+  config = Object.assign(
+    {},
+    {
+      empty: &apos; &apos;,
+      emptyColor: &apos;rgb(0, 0, 0)&apos;,
+      wall: &apos;#&apos;,
+      wallColor: &apos;rgb(255, 0, 0)&apos;,
+      floor: &apos;=&apos;,
+      floorColor: &apos;rgb(210, 210, 210)&apos;,
+      door: &apos;.&apos;,
+      doorColor: &apos;rgb(0, 0, 255)&apos;,
+      start: &apos;S&apos;,
+      end: &apos;E&apos;,
+      battle: &apos;I&apos;,
+      startColor: &apos;rgb(0, 0, 0)&apos;,
+      fontSize: &apos;15px&apos;
+    },
+    config
+  );
+
+  let string = &apos;&apos;;
+  const styles = [];
+
+  // First line in the browser console window has console line mapping
+  // (e.g. &quot;dungeon.js:724&quot;) which throws off the table. Kill two birds by
+  // displaying a guide on the first two lines.
+  string += &apos;Dungeon: the console window should be big enough to see all of &apos;
+    + &apos;the guide on the next line:\n&apos;;
+  string += `%c|${&apos;=&apos;.repeat( dungeon.width * 2 - 2 )}|\n\n`;
+  styles.push( `font-size: ${config.fontSize}` );
+
+  for ( let y = 0; y &lt; dungeon.height; y += 1 ) {
+    for ( let x = 0; x &lt; dungeon.width; x += 1 ) {
+      const tile = dungeon.tiles[ y ][ x ];
+      if ( tile === Tiles.EMPTY ) {
+        string += `%c${config.empty}`;
+        styles.push(
+          `color: ${config.emptyColor}; font-size: ${config.fontSize}` );
+      }
+      else if ( tile === Tiles.WALL ) {
+        string += `%c${config.wall}`;
+        styles.push(
+          `color: ${config.wallColor}; font-size: ${config.fontSize}` );
+      }
+      else if ( tile === Tiles.FLOOR ) {
+        string += `%c${config.floor}`;
+        styles.push(
+          `color: ${config.floorColor}; font-size: ${config.fontSize}` );
+      }
+      else if ( tile === Tiles.DOOR ) {
+        string += `%c${config.door}`;
+        styles.push(
+          `color: ${config.doorColor}; font-size: ${config.fontSize}` );
+      }
+      else if ( tile === Tiles.START ) {
+        string += `%c${config.start}`;
+        styles.push(
+          `color: ${config.startColor}; font-size: ${config.fontSize}` );
+      }
+      else if ( tile === Tiles.END ) {
+        string += `%c${config.end}`;
+        styles.push(
+          `color: ${config.startColor}; font-size: ${config.fontSize}` );
+      }
+      else if ( tile === Tiles.ITEM ) {
+        string += `%c${config.battle}`;
+        styles.push(
+          `color: ${config.startColor}; font-size: ${config.fontSize}` );
+      }
+      string += &apos; &apos;;
+    }
+    string += &apos;\n&apos;;
+  }
+  console.log( string, ...styles );
+}</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/entity/Player.js | micrungeon</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="Phaser 3 hybrid game"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="micrungeon"><meta property="twitter:description" content="Phaser 3 hybrid game"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/blackjack26/micrungeon"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Difficulty">Difficulty</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Direction">Direction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Edge">Edge</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Orientation">Orientation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RoomType">RoomType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Door">Door</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-DungeonConfig">DungeonConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HealthBarConfig">HealthBarConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ItemUseConfig">ItemUseConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-RandomNumberRange">RandomNumberRange</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-RoomAttachment">RoomAttachment</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-RoomConfig">RoomConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SpriteConfig">SpriteConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-TilePosition">TilePosition</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#battle">battle</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/battle/Battle.js~Battle.html">Battle</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/battle/BattleDrop.js~BattleDrop.html">BattleDrop</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/battle/HealthBar.js~HealthBar.html">HealthBar</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#dungeon">dungeon</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/Dungeon.js~Dungeon.html">Dungeon</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/Hallway.js~Hallway.html">Hallway</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/Room.js~Room.html">Room</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/TilemapVisibility.js~TilemapVisibility.html">TilemapVisibility</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-debugMap">debugMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Tileset">Tileset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Tiles">Tiles</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#entity">entity</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/Enemy.js~Enemy.html">Enemy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/Player.js~Player.html">Player</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#entity-items">entity/items</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/BugSpray.js~BugSpray.html">BugSpray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Injection.js~Injection.html">Injection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Inventory.js~Inventory.html">Inventory</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Item.js~Item.html">Item</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/ItemDrop.js~ItemDrop.html">ItemDrop</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Timelapse.js~Timelapse.html">Timelapse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/VorpalSword.js~VorpalSword.html">VorpalSword</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-itemClass">itemClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ItemType">ItemType</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#minigames">minigames</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/minigames/DanceDance.js~DanceDance.html">DanceDance</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/minigames/MiniGame.js~MiniGame.html">MiniGame</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scenes">scenes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/BootScene.js~BootScene.html">BootScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/GameScene.js~GameScene.html">GameScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/InventoryScene.js~InventoryScene.html">InventoryScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/PauseScene.js~PauseScene.html">PauseScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/TitleScene.js~TitleScene.html">TitleScene</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scenes-elements">scenes/elements</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/elements/Message.js~Message.html">Message</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#util">util</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/util/KeyBinding.js~KeyBinding.html">KeyBinding</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/util/LightPipeline.js~LightPipeline.html">LightPipeline</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/util/Random.js~Random.html">Random</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-addDynamicAnim">addDynamicAnim</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-addStaticAnim">addStaticAnim</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createAnimations">createAnimations</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/entity/Player.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Entity from &apos;./Entity&apos;;
+import HealthBar from &apos;../battle/HealthBar&apos;;
+import { Inventory } from &apos;./items&apos;;
+import Random from &apos;../util/Random&apos;;
+
+/**
+ * Base class for all player interactions
+ */
+export default class Player extends Entity {
+  /**
+   * @constructor
+   * @param {number} x The horizontal position
+   * @param {number} y The vertical position
+   * @param {Phaser.Scene} scene The current scene
+   */
+  constructor( x, y, scene ) {
+    super( {
+      scene: scene,
+      key: &apos;player&apos;,
+      x: x,
+      y: y
+    } );
+    
+    /**
+     * The player&apos;s inventory to hold items
+     * @type {Inventory}
+     */
+    this.inventory = new Inventory();
+    
+    /**
+     * The players movement speed in the world
+     * @type {number}
+     */
+    this.speed = 200;
+    
+    /**
+     * If true, the player cannot move by use of the keyboard / controller
+     * @type {boolean}
+     */
+    this.movementDisabled = false;
+    
+    /**
+     * The chance that a critical hit will happen (0-100)
+     * @type {number}
+     */
+    this.criticalChance = 0;
+    
+    /**
+     * Whether or not the player is alive
+     * @type {boolean}
+     */
+    this.alive = true;
+    
+    /**
+     * The movement destination of the player. Used when moving the player
+     * without the use of the keyboard.
+     * @type {{ x: number, y: number }}
+     */
+    this.dest = null;
+    
+    /**
+     * The callback when automatic player movement is finished
+     * @type {function}
+     */
+    this.movementCallback = null;
+    
+    // this.anims.play( &apos;sample&apos; );
+    this.setHealth( 10 );
+    this.drawPlayerHUD();
+    this.setPipeline( &apos;LightPipeline&apos; );
+  }
+
+  /**
+   * Draws the player HUD
+   */
+  drawPlayerHUD() {
+    const { width } = this.scene.game.config;
+    const HUD_X = -width;
+
+    const healthTxt = this.scene.add.text(
+      HUD_X + 10, 10, &apos;Health&apos;, {
+        fontSize: &apos;12px&apos;,
+        color: &apos;#FFF&apos;,
+        fontFamily: &apos;Rye&apos;
+      }
+    );
+    healthTxt.setShadow( 0, 2, &apos;#000&apos;, 10 );
+
+    /**
+     * The player&apos;s health bar
+     * @type {HealthBar}
+     */
+    this.healthBar = new HealthBar( this.scene, {
+      x: healthTxt.x + healthTxt.width + 10,
+      y: 12,
+      height: 10
+    } );
+  }
+
+  /**
+   * @override
+   */
+  update( time, delta ) {
+    // Stop any previous movement from the last frame
+    this.body.setVelocity( 0 );
+
+    // Allow player to move themselves
+    if ( !this.movementDisabled ) {
+      // Horizontal movement
+      if ( this.scene.keys.left.isDown ) {
+        this.body.setVelocityX( -this.speed );
+      }
+      else if ( this.scene.keys.right.isDown ) {
+        this.body.setVelocityX( this.speed );
+      }
+
+      // Vertical movement
+      if ( this.scene.keys.up.isDown ) {
+        this.body.setVelocityY( -this.speed );
+      }
+      else if ( this.scene.keys.down.isDown ) {
+        this.body.setVelocityY( this.speed );
+      }
+    }
+    // Automatically move player into a battle room and lock doors
+    else if ( this.dest ) {
+      this.body.setVelocityX( this.dest.x - this.x );
+      this.body.setVelocityY( this.dest.y - this.y );
+      if ( this.body.velocity.length() &lt; 2 ) {
+        this.movementDisabled = false;
+        if ( typeof this.movementCallback === &apos;function&apos; ) {
+          this.movementCallback();
+          this.movementCallback = null;
+        }
+        this.dest = null;
+      }
+    }
+
+    // Normalize and scale the velocity so that sprite can&apos;t move
+    // faster along a diagonal
+    this.body.velocity.normalize().scale( this.speed );
+  }
+
+  /**
+   * @override
+   */
+  injure( damage ) {
+    super.injure( damage );
+    this.healthBar.setPercent( this.health / this.maxHealth );
+  }
+
+  /**
+   * @override
+   */
+  heal( amount ) {
+    super.heal( amount );
+    this.healthBar.setPercent( this.health / this.maxHealth );
+  }
+
+  /**
+   * Attacks the given enemy with the given damage
+   * @param {Enemy} enemy The enemy to attack
+   * @param {number} damage The amount to injure the enemy
+   */
+  attack( enemy, damage ) {
+    // Critical Hit
+    if ( this.criticalChance !== 0 ) {
+      const r = new Random();
+      if ( r.randInt( 0, 100 ) &lt; this.criticalChance ) {
+        damage = enemy.health;
+      }
+    }
+    enemy.injure( damage );
+  }
+
+  /**
+   * @override
+   */
+  slay() {
+    this.alive = false;
+  }
+
+  /**
+   * Sets the destination for the player to move to
+   * @param {number} x The x-coordinate
+   * @param {number} y The y-coordinate
+   * @param {function} callback The callback when the movement is finished
+   */
+  setDestination( x, y, callback ) {
+    this.dest = {
+      x: x,
+      y: y
+    };
+    this.movementDisabled = true;
+    this.movementCallback = callback;
+  }
+}</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

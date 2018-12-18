@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/scenes/BootScene.js | micrungeon</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="Phaser 3 hybrid game"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="micrungeon"><meta property="twitter:description" content="Phaser 3 hybrid game"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/blackjack26/micrungeon"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Difficulty">Difficulty</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Direction">Direction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Edge">Edge</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Orientation">Orientation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RoomType">RoomType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Door">Door</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-DungeonConfig">DungeonConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HealthBarConfig">HealthBarConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ItemUseConfig">ItemUseConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-RandomNumberRange">RandomNumberRange</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-RoomAttachment">RoomAttachment</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-RoomConfig">RoomConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SpriteConfig">SpriteConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-TilePosition">TilePosition</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#battle">battle</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/battle/Battle.js~Battle.html">Battle</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/battle/BattleDrop.js~BattleDrop.html">BattleDrop</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/battle/HealthBar.js~HealthBar.html">HealthBar</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#dungeon">dungeon</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/Dungeon.js~Dungeon.html">Dungeon</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/Hallway.js~Hallway.html">Hallway</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/Room.js~Room.html">Room</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/TilemapVisibility.js~TilemapVisibility.html">TilemapVisibility</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-debugMap">debugMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Tileset">Tileset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Tiles">Tiles</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#entity">entity</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/Enemy.js~Enemy.html">Enemy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/Player.js~Player.html">Player</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#entity-items">entity/items</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/BugSpray.js~BugSpray.html">BugSpray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Injection.js~Injection.html">Injection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Inventory.js~Inventory.html">Inventory</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Item.js~Item.html">Item</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/ItemDrop.js~ItemDrop.html">ItemDrop</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Timelapse.js~Timelapse.html">Timelapse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/VorpalSword.js~VorpalSword.html">VorpalSword</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-itemClass">itemClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ItemType">ItemType</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#minigames">minigames</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/minigames/DanceDance.js~DanceDance.html">DanceDance</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/minigames/MiniGame.js~MiniGame.html">MiniGame</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scenes">scenes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/BootScene.js~BootScene.html">BootScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/GameScene.js~GameScene.html">GameScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/InventoryScene.js~InventoryScene.html">InventoryScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/PauseScene.js~PauseScene.html">PauseScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/TitleScene.js~TitleScene.html">TitleScene</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scenes-elements">scenes/elements</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/elements/Message.js~Message.html">Message</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#util">util</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/util/KeyBinding.js~KeyBinding.html">KeyBinding</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/util/LightPipeline.js~LightPipeline.html">LightPipeline</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/util/Random.js~Random.html">Random</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-addDynamicAnim">addDynamicAnim</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-addStaticAnim">addStaticAnim</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createAnimations">createAnimations</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/scenes/BootScene.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { createAnimations } from &apos;../util/Animation&apos;;
+import { DanceDance } from &apos;../minigames&apos;;
+import LightPipeline from &apos;../util/LightPipeline&apos;;
+
+/**
+ * The boot scene, or splash screen, is used to initialize most of the game
+ * objects and images. The preload method will be mostly utilized. Once all
+ * assets are loaded, the title scene is started.
+ */
+export default class BootScene extends Phaser.Scene {
+  /**
+   * Initializes the boot scene
+   */
+  constructor() {
+    super( { key: &apos;BootScene&apos; } );
+  }
+
+  /**
+   * @override
+   */
+  preload() {
+    const progress = this.add.graphics();
+
+    // Register a load progress event to show a load bar
+    this.load.on( &apos;progress&apos;, ( value ) =&gt; {
+      progress.clear();
+      progress.fillStyle( 0xFFFFFF, 1 );
+      progress.fillRect( 0, this.sys.game.config.height
+        / 2, this.sys.game.config.width * value, 60 );
+    } );
+
+    // Register a load complete event to launch the title screen when all
+    // files are loaded
+    this.load.on( &apos;complete&apos;, () =&gt; {
+      createAnimations( this );
+      progress.destroy();
+      this.scene.start( &apos;TitleScene&apos; );
+    } );
+
+    // Load all assets here
+    this.load.script( &apos;webfont&apos;,
+      &apos;https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js&apos; );
+    this.load.image( {
+      key: &apos;dungeon_tiles&apos;,
+      url: &apos;assets/dungeon-tileset-ext.png&apos;,
+      normalMap: &apos;assets/dungeon-tileset-ext_n.png&apos;
+    } );
+
+    this.loadItems();
+    this.loadSprites();
+
+    // TODO: DELETE THIS SAMPLE
+    this.load.atlas( &apos;sample-sprites&apos;, &apos;assets/sample-sprites.png&apos;,
+      &apos;assets/sample-sprites.json&apos; );
+
+    this.scene.add( &apos;DanceDance&apos;, DanceDance );
+    this.game.renderer.addPipeline( &apos;LightPipeline&apos;, new LightPipeline( {
+      game: this.game,
+      renderer: this.game.renderer,
+      maxLights: 10
+    } ) );
+  }
+
+  /**
+   * Loads the sprites
+   */
+  loadSprites() {
+    this.load.image( &apos;enemy&apos;, &apos;assets/enemy.png&apos; );
+    this.load.image( {
+      key: &apos;player&apos;,
+      url: &apos;assets/player/player.png&apos;,
+      normalMap: &apos;assets/player/player_n.png&apos;
+    } );
+  }
+
+  /**
+   * Loads the items
+   */
+  loadItems() {
+    this.loadItem( &apos;injection&apos; );
+    this.loadItem( &apos;timelapse&apos; );
+    this.loadItem( &apos;vorpal_sword&apos; );
+    this.loadItem( &apos;bug_spray&apos; );
+  }
+
+  /**
+   * Loads the image for an item based on its name
+   * @param {string} name The name of the item
+   */
+  loadItem( name ) {
+    this.load.image( {
+      key: name,
+      url: `assets/items/${name}/${name}.png`,
+      normalMap: `assets/items/${name}/${name}_n.png`
+    } );
+  }
+}</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/minigames/MiniGame.js | micrungeon</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="Phaser 3 hybrid game"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="micrungeon"><meta property="twitter:description" content="Phaser 3 hybrid game"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/blackjack26/micrungeon"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Difficulty">Difficulty</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Direction">Direction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Edge">Edge</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Orientation">Orientation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RoomType">RoomType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Door">Door</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-DungeonConfig">DungeonConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HealthBarConfig">HealthBarConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ItemUseConfig">ItemUseConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-RandomNumberRange">RandomNumberRange</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-RoomAttachment">RoomAttachment</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-RoomConfig">RoomConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SpriteConfig">SpriteConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-TilePosition">TilePosition</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#battle">battle</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/battle/Battle.js~Battle.html">Battle</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/battle/BattleDrop.js~BattleDrop.html">BattleDrop</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/battle/HealthBar.js~HealthBar.html">HealthBar</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#dungeon">dungeon</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/Dungeon.js~Dungeon.html">Dungeon</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/Hallway.js~Hallway.html">Hallway</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/Room.js~Room.html">Room</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/TilemapVisibility.js~TilemapVisibility.html">TilemapVisibility</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-debugMap">debugMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Tileset">Tileset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Tiles">Tiles</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#entity">entity</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/Enemy.js~Enemy.html">Enemy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/Player.js~Player.html">Player</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#entity-items">entity/items</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/BugSpray.js~BugSpray.html">BugSpray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Injection.js~Injection.html">Injection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Inventory.js~Inventory.html">Inventory</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Item.js~Item.html">Item</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/ItemDrop.js~ItemDrop.html">ItemDrop</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Timelapse.js~Timelapse.html">Timelapse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/VorpalSword.js~VorpalSword.html">VorpalSword</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-itemClass">itemClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ItemType">ItemType</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#minigames">minigames</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/minigames/DanceDance.js~DanceDance.html">DanceDance</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/minigames/MiniGame.js~MiniGame.html">MiniGame</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scenes">scenes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/BootScene.js~BootScene.html">BootScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/GameScene.js~GameScene.html">GameScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/InventoryScene.js~InventoryScene.html">InventoryScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/PauseScene.js~PauseScene.html">PauseScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/TitleScene.js~TitleScene.html">TitleScene</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scenes-elements">scenes/elements</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/elements/Message.js~Message.html">Message</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#util">util</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/util/KeyBinding.js~KeyBinding.html">KeyBinding</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/util/LightPipeline.js~LightPipeline.html">LightPipeline</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/util/Random.js~Random.html">Random</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-addDynamicAnim">addDynamicAnim</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-addStaticAnim">addStaticAnim</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createAnimations">createAnimations</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/minigames/MiniGame.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { ItemType } from &apos;../entity/items&apos;;
+import KeyBinding from &apos;../util/KeyBinding&apos;;
+import { Difficulty } from &apos;../globals&apos;;
+
+/**
+ * Base class for all mini games
+ */
+export default class MiniGame extends Phaser.Scene {
+  /**
+   * Creates a mini game within the current scene
+   * @constructor
+   * @param {string} key - The scene key
+   */
+  constructor( key ) {
+    super( { key: key } );
+    
+    /**
+     * The scene key
+     * @type {string}
+     */
+    this.key = key;
+    
+    /**
+     * The name of the minigame
+     * @type {string}
+     */
+    this.name = &apos;Default MiniGame&apos;;
+    
+    /**
+     * The description of the minigame
+     * @type {string}
+     */
+    this.description = &apos;Default description&apos;;
+
+    /**
+     * The text displayed quickly to the user before the minigame begins
+     * @type {string}
+     */
+    this.text = &apos;Default!&apos;;
+
+    /**
+     * The time duration of the mini game in ms
+     * @type {number}
+     */
+    this.duration = -1;
+    
+    /**
+     * The amount of time elapsed in ms since the minigame started
+     * @type {number}
+     */
+    this.elapsedTime = 0;
+    
+    /**
+     * Whether or not the minigame has started
+     * @type {boolean}
+     */
+    this.started = false;
+    
+    /**
+     * The horizontal position of the minigame window
+     * @type {number}
+     */
+    this.x = 25;
+    
+    /**
+     * The vertical position of the minigame window
+     * @type {number}
+     */
+    this.y = 25;
+    
+    /**
+     * The difficulty of the minigame
+     * @type {Difficulty}
+     */
+    this.difficulty = Difficulty.EASY;
+    
+    /**
+     * The time scale applied to the duration of the minigame
+     * @type {number}
+     */
+    this.timeScale = 1;
+    
+    /**
+     * The parent scene that created this minigame
+     * @type {Phaser.Scene}
+     */
+    this.parent = null;
+    
+    /**
+     * The width of the game
+     * @type {number}
+     */
+    this.w = -1;
+    
+    /**
+     * The height of the game
+     * @type {number}
+     */
+    this.h = -1;
+    
+    /**
+     * The text graphic displayed to the user quickly before the minigame starts
+     * @type {Phaser.GameObjects.Text}
+     */
+    this.alertText = null;
+    
+    /**
+     * The ID of the timeout used for starting the minigame
+     * @type {number}
+     */
+    this.startTimeout = -1;
+    
+    /**
+     * The graphics bar used to display the amount of time left in the minigame
+     * @type {Phaser.GameObjects.Graphics}
+     */
+    this.timerBar = null;
+  }
+
+  /**
+   * Initializes data when the mini game is created
+   * @param {object} data - information passed from parent scene
+   */
+  create( data ) {
+    this.parent = data.parent;
+    this.difficulty = data.difficulty;
+    this.w = this.sys.game.config.width;
+    this.h = this.sys.game.config.height;
+
+    const background = this.add.graphics();
+    background.fillStyle( 0x999999, 1 );
+    background.fillRect( this.x, this.y, this.w - 50, this.h - 50 );
+
+    this.add.text( this.x + 16, this.y + 16, this.name,
+      {
+        fontSize: &apos;24px&apos;,
+        fill: &apos;#FFF&apos;
+      } );
+    this.add.text( this.x + 16, this.y + 40, this.description,
+      {
+        fontSize: &apos;12px&apos;,
+        fill: &apos;#FFF&apos;
+      } );
+
+    this.alertText = this.add.text( this.w / 2, this.h / 2, this.text,
+      {
+        fontSize: &apos;40px&apos;,
+        fill: &apos;#FFF&apos;
+      } );
+    this.alertText.setPosition(
+      this.alertText.x - this.alertText.width / 2,
+      this.alertText.y - this.alertText.height / 2
+    );
+
+    // Show text for 1 second, then start mini game
+    this.startTimeout = setTimeout( () =&gt; {
+      this.startGame();
+    }, 1000 );
+
+    this.timerBar = this.add.graphics();
+    this.timerBar.fillStyle( 0xFFFFFF, 0.4 );
+    this.timerBar.fillRect( this.x, this.h - 10 - this.y, this.w - 50, 10 );
+
+    /**
+     * Object used to store the keys available for use in the minigame
+     * @type {Object}
+     */
+    this.keys = KeyBinding.createKeys( this, [ &apos;interact&apos; ] );
+  }
+
+  /**
+   * Updates every tick of the game loop
+   * @param {number} time The current time
+   * @param {number} delta The delta time in ms since the last frame
+   */
+  update( time, delta ) {
+    if ( this.started ) {
+      if ( this.duration !== -1 ) {
+        if ( this.elapsedTime &gt; this.duration ) {
+          this.lose();
+        }
+        this.elapsedTime += delta * this.timeScale;
+
+        this.timerBar.clear();
+        this.timerBar.fillStyle( 0xFFFFFF, 0.4 );
+        this.timerBar.fillRect( this.x,
+          this.h - 10 - this.y,
+          this.w - ( ( this.w - 50 ) * ( this.elapsedTime / this.duration ) )
+          - 50,
+          10
+        );
+      }
+      this.updateMiniGame( time, delta );
+    }
+    else if ( this.keys.interact.isDown ) {
+      this.openInventory();
+    }
+  }
+
+  /**
+   * Opens the inventory
+   */
+  openInventory() {
+    clearTimeout( this.startTimeout );
+    this.input.keyboard.resetKeys();
+    this.scene
+      .launch( &apos;InventoryScene&apos;, {
+        parent: this,
+        inventory: this.parent.scene.player.inventory,
+        context: ItemType.MINIGAME
+      } )
+      .bringToTop( &apos;InventoryScene&apos; )
+      .pause();
+  }
+
+  /**
+   * Closes the inventory
+   * @param {Item} item The item selected from the inventory
+   */
+  closeInventory( item ) {
+    this.scene.stop( &apos;InventoryScene&apos; );
+    this.input.keyboard.resetKeys();
+    this.scene.resume();
+
+    if ( item &amp;&amp; item.itemType === ItemType.MINIGAME ) {
+      item.use( { minigame: this } );
+      this.parent.scene.player.inventory.items.splice( item.inventoryIndex, 1 );
+      this.startGame();
+    }
+    else {
+      this.startTimeout = setTimeout( () =&gt; {
+        this.startGame();
+      }, 1000 );
+    }
+  }
+
+  /**
+   * Called right before the mini game starts
+   */
+  startGame() {
+    this.alertText.destroy();
+    this.started = true;
+  }
+
+  /**
+   * This method will only be updated once the mini game has officially started.
+   * The mini game will start after the alert text disappears.
+   * @param {number} time The current time
+   * @param {number} delta The delta time in ms since the last frame
+   */
+  updateMiniGame( time, delta ) {
+    // NOTE: Override this in mini game classes
+    throw new Error( &apos;updateMiniGame() must be overriden&apos; );
+  }
+
+  /**
+   * Called when the mini game has been won. Will redirect back to combat.
+   */
+  win() {
+    const timeLeft = this.duration - this.elapsedTime;
+
+    this.reset();
+    this.parent.continueCombat( {
+      win: true,
+      damage: Math.ceil( timeLeft / 1000 ) * this.difficulty
+    } );
+  }
+
+  /**
+   * Called when the mini game has been lost. Will redirect back to combat.
+   */
+  lose() {
+    this.reset();
+    this.parent.continueCombat( {
+      win: false,
+      damage: 0
+    } );
+  }
+
+  /**
+   * Resets the mini game to its original state to be played again.
+   */
+  reset() {
+    this.timerBar.destroy();
+    this.elapsedTime = 0;
+    this.started = false;
+    this.timeScale = 1;
+  }
+}</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/util/LightPipeline.js | micrungeon</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="Phaser 3 hybrid game"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="micrungeon"><meta property="twitter:description" content="Phaser 3 hybrid game"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/blackjack26/micrungeon"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Difficulty">Difficulty</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Direction">Direction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Edge">Edge</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Orientation">Orientation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RoomType">RoomType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Door">Door</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-DungeonConfig">DungeonConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HealthBarConfig">HealthBarConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ItemUseConfig">ItemUseConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-RandomNumberRange">RandomNumberRange</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-RoomAttachment">RoomAttachment</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-RoomConfig">RoomConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SpriteConfig">SpriteConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-TilePosition">TilePosition</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#battle">battle</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/battle/Battle.js~Battle.html">Battle</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/battle/BattleDrop.js~BattleDrop.html">BattleDrop</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/battle/HealthBar.js~HealthBar.html">HealthBar</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#dungeon">dungeon</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/Dungeon.js~Dungeon.html">Dungeon</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/Hallway.js~Hallway.html">Hallway</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/Room.js~Room.html">Room</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/dungeon/TilemapVisibility.js~TilemapVisibility.html">TilemapVisibility</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-debugMap">debugMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Tileset">Tileset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Tiles">Tiles</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#entity">entity</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/Enemy.js~Enemy.html">Enemy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/Player.js~Player.html">Player</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#entity-items">entity/items</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/BugSpray.js~BugSpray.html">BugSpray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Injection.js~Injection.html">Injection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Inventory.js~Inventory.html">Inventory</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Item.js~Item.html">Item</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/ItemDrop.js~ItemDrop.html">ItemDrop</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/Timelapse.js~Timelapse.html">Timelapse</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/entity/items/VorpalSword.js~VorpalSword.html">VorpalSword</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-itemClass">itemClass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ItemType">ItemType</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#minigames">minigames</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/minigames/DanceDance.js~DanceDance.html">DanceDance</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/minigames/MiniGame.js~MiniGame.html">MiniGame</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scenes">scenes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/BootScene.js~BootScene.html">BootScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/GameScene.js~GameScene.html">GameScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/InventoryScene.js~InventoryScene.html">InventoryScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/PauseScene.js~PauseScene.html">PauseScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/TitleScene.js~TitleScene.html">TitleScene</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#scenes-elements">scenes/elements</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/scenes/elements/Message.js~Message.html">Message</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#util">util</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/util/KeyBinding.js~KeyBinding.html">KeyBinding</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/util/LightPipeline.js~LightPipeline.html">LightPipeline</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/util/Random.js~Random.html">Random</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-addDynamicAnim">addDynamicAnim</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-addStaticAnim">addStaticAnim</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createAnimations">createAnimations</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/util/LightPipeline.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ * Constant used to simplify calling the
+ * Phaser.Renderer.WebGL.Pipelines.TextureTintPipeline class
+ * @type {Phaser.Renderer.WebGL.Pipelines.TextureTintPipeline}
+ */
+const TextureTintPipeline = Phaser.Renderer.WebGL.Pipelines.TextureTintPipeline;
+
+/**
+ * The maximum number of lights allowed to render in a scene
+ * @type {number}
+ */
+let LIGHT_COUNT = 10;
+
+/**
+ * Custom light pipeline to fix issues with the current diffuse lighting
+ * pipeline.
+ */
+export default class LightPipeline
+  extends Phaser.Renderer.WebGL.Pipelines.ForwardDiffuseLightPipeline {
+  /**
+   * @constructor
+   * @override
+   */
+  constructor( config ) {
+    super( config );
+
+    LIGHT_COUNT = config.maxLights;
+
+    /* eslint-disable */
+    config.fragShader = [
+      &apos;#define SHADER_NAME PHASER_FORWARD_DIFFUSE_FS&apos;,
+      &apos;&apos;,
+      &apos;precision mediump float;&apos;,
+      &apos;&apos;,
+      &apos;struct Light&apos;,
+      &apos;{&apos;,
+      &apos;    vec2 position;&apos;,
+      &apos;    vec3 color;&apos;,
+      &apos;    float intensity;&apos;,
+      &apos;    float radius;&apos;,
+      &apos;    float hWidth;&apos;,
+      &apos;    float hHeight;&apos;,
+      &apos;};&apos;,
+      &apos;&apos;,
+      &apos;const int kMaxLights = %LIGHT_COUNT%;&apos;,
+      &apos;&apos;,
+      &apos;uniform vec4 uCamera; /* x, y, rotation, zoom */&apos;,
+      &apos;uniform vec2 uResolution;&apos;,
+      &apos;uniform sampler2D uMainSampler;&apos;,
+      &apos;uniform sampler2D uNormSampler;&apos;,
+      &apos;uniform vec3 uAmbientLightColor;&apos;,
+      &apos;uniform Light uLights[kMaxLights];&apos;,
+      &apos;&apos;,
+      &apos;varying vec2 outTexCoord;&apos;,
+      &apos;varying vec4 outTint;&apos;,
+      &apos;&apos;,
+      &apos;void main()&apos;,
+      &apos;{&apos;,
+      &apos;    vec3 finalColor = vec3(0.0, 0.0, 0.0);&apos;,
+      &apos;    vec4 color = texture2D(uMainSampler, outTexCoord) * vec4(outTint.rgb * outTint.a, outTint.a);&apos;,
+      &apos;    vec3 normalMap = texture2D(uNormSampler, outTexCoord).rgb;&apos;,
+      &apos;    vec3 normal = normalize(vec3(normalMap * 2.0 - 1.0));&apos;,
+      &apos;    vec2 res = vec2(min(uResolution.x, uResolution.y)) * uCamera.w;&apos;,
+      &apos;&apos;,
+      &apos;    for (int index = 0; index &lt; kMaxLights; ++index)&apos;,
+      &apos;    {&apos;,
+      &apos;        Light light = uLights[index];&apos;,
+      &apos;        vec3 lightDir = vec3((light.position.xy / res) - (gl_FragCoord.xy / res), 0.2);&apos;,
+      &apos;        vec3 lightNormal = normalize(lightDir);&apos;,
+      &apos;        float distToSurf = length(lightDir) * uCamera.w;&apos;,
+      &apos;        float diffuseFactor = max(dot(normal, lightNormal), 0.0);&apos;,
+      &apos;        float radius = (light.radius / res.x * uCamera.w) * uCamera.w;&apos;,
+      &apos;        float attenuation = clamp(1.0 - distToSurf * distToSurf / (radius * radius), 0.0, 1.0);&apos;,
+      &apos;        vec3 diffuse = light.color * diffuseFactor;&apos;,
+      &apos;        finalColor += (attenuation * diffuse) * light.intensity;&apos;,
+      &apos;    }&apos;,
+      &apos;&apos;,
+      &apos;    vec4 colorOutput = vec4(uAmbientLightColor + finalColor, 1.0);&apos;,
+      &apos;    gl_FragColor = color * vec4(colorOutput.rgb * colorOutput.a, colorOutput.a);&apos;,
+      &apos;&apos;,
+      &apos;}&apos;,
+      &apos;&apos;
+    ].join( &apos;\n&apos; ).replace( &apos;%LIGHT_COUNT%&apos;, LIGHT_COUNT.toString() );
+    /* eslint-enable */
+
+    TextureTintPipeline.call( this, config );
+  }
+
+  /**
+   * @override
+   */
+  onBind( gameObject ) {
+    TextureTintPipeline.prototype.onBind.call( this );
+
+    const renderer = this.renderer;
+    const program = this.program;
+
+    this.mvpUpdate();
+
+    renderer.setInt1( program, &apos;uNormSampler&apos;, 1 );
+    renderer.setFloat2( program, &apos;uResolution&apos;, this.width, this.height );
+
+    if ( gameObject ) {
+      this.setNormalMap( gameObject );
+    }
+
+    return this;
+  }
+
+  /**
+   * @override
+   */
+  onRender( scene, camera ) {
+    /**
+     * Whether or not the pipeline is active
+     * @type {boolean}
+     */
+    this.active = false;
+
+    const lightManager = scene.sys.lights;
+
+    if ( !lightManager || lightManager.lights.length &lt;= 0 ||
+      !lightManager.active ) {
+      // Passthru
+      return this;
+    }
+
+    const lights = lightManager.cull( camera );
+    const lightCount = Math.min( lights.length, LIGHT_COUNT );
+
+    if ( lightCount === 0 ) {
+      return this;
+    }
+
+    this.active = true;
+
+    const renderer = this.renderer;
+    const program = this.program;
+    const cameraMatrix = camera.matrix;
+    const point = {
+      x: 0,
+      y: 0
+    };
+    const height = renderer.height;
+    let index;
+
+    for ( index = 0; index &lt; LIGHT_COUNT; ++index ) {
+      // Reset lights
+      renderer.setFloat1( program, &apos;uLights[&apos; + index + &apos;].radius&apos;, 0 );
+    }
+
+    renderer.setFloat4( program, &apos;uCamera&apos;, camera.x, camera.y,
+      camera.rotation, camera.zoom );
+    renderer.setFloat3( program, &apos;uAmbientLightColor&apos;,
+      lightManager.ambientColor.r, lightManager.ambientColor.g,
+      lightManager.ambientColor.b );
+
+    for ( index = 0; index &lt; lightCount; ++index ) {
+      const light = lights[ index ];
+      const lightName = &apos;uLights[&apos; + index + &apos;].&apos;;
+
+      cameraMatrix.transformPoint( light.x, light.y, point );
+
+      renderer.setFloat2( program, lightName + &apos;position&apos;,
+        point.x - ( camera.scrollX * light.scrollFactorX * camera.zoom ),
+        height - ( point.y - ( camera.scrollY * light.scrollFactorY ) *
+        camera.zoom )
+      );
+      renderer.setFloat3( program, lightName + &apos;color&apos;,
+        light.r, light.g, light.b );
+      renderer.setFloat1( program, lightName + &apos;intensity&apos;, light.intensity );
+      renderer.setFloat1( program, lightName + &apos;radius&apos;, light.radius );
+
+      if ( light.hWidth &amp;&amp; light.hHeight ) {
+        renderer.setFloat1( program, lightName + &apos;hWidth&apos;, light.hWidth );
+        renderer.setFloat1( program, lightName + &apos;hHeight&apos;, light.hHeight );
+      }
+    }
+
+    return this;
+  }
+
+  /**
+   * @override
+   */
+  batchTexture(
+    gameObject,
+    texture,
+    textureWidth, textureHeight,
+    srcX, srcY,
+    srcWidth, srcHeight,
+    scaleX, scaleY,
+    rotation,
+    flipX, flipY,
+    scrollFactorX, scrollFactorY,
+    displayOriginX, displayOriginY,
+    frameX, frameY, frameWidth, frameHeight,
+    tintTL, tintTR, tintBL, tintBR, tintEffect,
+    uOffset, vOffset,
+    camera,
+    parentTransformMatrix
+  ) {
+    if ( !this.active ) {
+      return;
+    }
+
+    this.renderer.setPipeline( this );
+
+    let normalTexture;
+
+    if ( gameObject.displayTexture ) {
+      normalTexture = gameObject.displayTexture
+        .dataSource[ gameObject.displayFrame.sourceIndex ];
+    }
+    else if ( gameObject.texture ) {
+      normalTexture = gameObject.texture
+        .dataSource[ gameObject.frame.sourceIndex ];
+    }
+    else if ( gameObject.tileset ) {
+      // NOTE: PATCH HERE
+      normalTexture = gameObject.tileset[ 0 ].image.dataSource[ 0 ];
+    }
+
+    if ( !normalTexture ) {
+      console.warn( &apos;Normal map missing or invalid&apos; );
+      return;
+    }
+
+    this.setTexture2D( normalTexture.glTexture, 1 );
+
+    const camMatrix = this._tempMatrix1;
+    const spriteMatrix = this._tempMatrix2;
+    const calcMatrix = this._tempMatrix3;
+
+    let u0 = ( frameX / textureWidth ) + uOffset;
+    let v0 = ( frameY / textureHeight ) + vOffset;
+    let u1 = ( frameX + frameWidth ) / textureWidth + uOffset;
+    let v1 = ( frameY + frameHeight ) / textureHeight + vOffset;
+
+    let width = srcWidth;
+    let height = srcHeight;
+
+    // var x = -displayOriginX + frameX;
+    // var y = -displayOriginY + frameY;
+
+    let x = -displayOriginX;
+    let y = -displayOriginY;
+
+    if ( gameObject.isCropped ) {
+      const crop = gameObject._crop;
+
+      width = crop.width;
+      height = crop.height;
+
+      srcWidth = crop.width;
+      srcHeight = crop.height;
+
+      frameX = crop.x;
+      frameY = crop.y;
+
+      let ox = frameX;
+      let oy = frameY;
+
+      if ( flipX ) {
+        ox = ( frameWidth - crop.x - crop.width );
+      }
+
+      if ( flipY &amp;&amp; !texture.isRenderTexture ) {
+        oy = ( frameHeight - crop.y - crop.height );
+      }
+
+      u0 = ( ox / textureWidth ) + uOffset;
+      v0 = ( oy / textureHeight ) + vOffset;
+      u1 = ( ox + crop.width ) / textureWidth + uOffset;
+      v1 = ( oy + crop.height ) / textureHeight + vOffset;
+
+      x = -displayOriginX + frameX;
+      y = -displayOriginY + frameY;
+    }
+
+    // Invert the flipY if this is a RenderTexture
+    flipY = flipY ^ ( texture.isRenderTexture ? 1 : 0 );
+
+    if ( flipX ) {
+      width *= -1;
+      x += srcWidth;
+    }
+
+    if ( flipY ) {
+      height *= -1;
+      y += srcHeight;
+    }
+
+    const xw = x + width;
+    const yh = y + height;
+
+    spriteMatrix.applyITRS( srcX, srcY, rotation, scaleX, scaleY );
+
+    camMatrix.copyFrom( camera.matrix );
+
+    if ( parentTransformMatrix ) {
+      // Multiply the camera by the parent matrix
+      camMatrix.multiplyWithOffset( parentTransformMatrix,
+        -camera.scrollX * scrollFactorX, -camera.scrollY * scrollFactorY );
+
+      // Undo the camera scroll
+      spriteMatrix.e = srcX;
+      spriteMatrix.f = srcY;
+
+      // Multiply by the Sprite matrix, store result in calcMatrix
+      camMatrix.multiply( spriteMatrix, calcMatrix );
+    }
+    else {
+      spriteMatrix.e -= camera.scrollX * scrollFactorX;
+      spriteMatrix.f -= camera.scrollY * scrollFactorY;
+
+      // Multiply by the Sprite matrix, store result in calcMatrix
+      camMatrix.multiply( spriteMatrix, calcMatrix );
+    }
+
+    let tx0 = calcMatrix.getX( x, y );
+    let ty0 = calcMatrix.getY( x, y );
+
+    let tx1 = calcMatrix.getX( x, yh );
+    let ty1 = calcMatrix.getY( x, yh );
+
+    let tx2 = calcMatrix.getX( xw, yh );
+    let ty2 = calcMatrix.getY( xw, yh );
+
+    let tx3 = calcMatrix.getX( xw, y );
+    let ty3 = calcMatrix.getY( xw, y );
+
+    if ( camera.roundPixels ) {
+      tx0 |= 0;
+      ty0 |= 0;
+
+      tx1 |= 0;
+      ty1 |= 0;
+
+      tx2 |= 0;
+      ty2 |= 0;
+
+      tx3 |= 0;
+      ty3 |= 0;
+    }
+
+    this.setTexture2D( texture, 0 );
+
+    this.batchQuad( tx0, ty0, tx1, ty1, tx2, ty2, tx3, ty3, u0, v0, u1, v1,
+      tintTL, tintTR, tintBL, tintBR, tintEffect );
+  }
+}</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
