@@ -1,7 +1,5 @@
 # Micrungeon [![Build Status](https://travis-ci.org/blackjack26/micrungeon.svg?branch=develop)](https://travis-ci.org/blackjack26/micrungeon)
 
-A game made for [Game Off 2018](https://itch.io/jam/game-off-2018) to incorporate the "Hybrid" theme.
-
 ## Set Up
 
 ### Clone Repository
@@ -32,7 +30,7 @@ The development server allows you to run the game in a browser. It also provides
 Run the following command:
 
 ```sh
-npm run dev
+npm start
 ```
 
 This should compile the source code to the `dev/` directory and open your browser to `localhost:3000`. If not, open your browser and navigate to `http://localhost:3000`.
@@ -45,17 +43,21 @@ To optimize and minimize the code for production deployment, run:
 npm run deploy
 ```
 
-The output of this command is in the `build/` directory.
+The output of this command is in the `app/` directory. This command also creates an `.exe` file to install the game as a desktop app. This is located in the `build/dist` directory.
 
-If you want to view the production deployment you can use `http-server` for a quick way to serve the files:
+### Test & Documentation
+
+To verify your code run:
 
 ```sh
-npm i -g http-server
-cd /path/to/micrungeon
-http-server ./build -p 8081
+npm test
 ```
 
-Then navigate to `http://localhost:8081` to view.
+To generate documentation based on the JSDoc comments, run:
+
+```sh
+npm run doc
+```
 
 ## License
 
